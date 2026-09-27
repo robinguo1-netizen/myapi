@@ -81,7 +81,8 @@ class Deployment:
             with urllib.request.urlopen(request, timeout=120) as response:
                 return json.load(response)
         except urllib.error.HTTPError as error:
-            raise DeploymentError(f"Google API {method} failed with HTTP {error.code}; response body suppressed because it may contain credentials") from None
+            target = urllib.parse.urlsplit(url)
+            raise DeploymentError(f"Google API {method} {target.hostname}{target.path} failed with HTTP {error.code}; response body suppressed because it may contain credentials") from None
 
     def project_info(self):
         return self.gc("projects", "describe", self.project)
@@ -225,7 +226,7 @@ class Deployment:
         password, _ = self.secret(self.secret_names["password"], lambda: secrets.token_urlsafe(36))
         users = self.gc("sql", "users", "list", f"--instance={self.instance}")
         if not any(item["name"] == "rs_app" for item in users):
-            operation = self.api(f"https://sqladmin.googleapis.com/sql/v1/projects/{self.project}/instances/{self.instance}/users", "POST", {"name": "rs_app", "password": password, "type": "BUILT_IN"})
+            operation = self.api(f"https://sqladmin.googleapis.com/v1/projects/{self.project}/instances/{self.instance}/users", "POST", {"name": "rs_app", "password": password, "type": "BUILT_IN"})
             self.gc("sql", "operations", "wait", operation["name"], "--timeout=600")
         query = urllib.parse.urlencode({"host": f"/cloudsql/{self.connection}", "sslmode": "disable"})
         dsn = f"postgresql://rs_app:{urllib.parse.quote(password, safe='')}@/rs_api?{query}"

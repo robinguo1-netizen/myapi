@@ -111,6 +111,8 @@ class DeploymentTests(unittest.TestCase):
         self.assertTrue(stored[self.d.secret_names["dsn"]].startswith("postgresql://rs_app:"))
         self.assertNotIn(stored[self.d.secret_names["password"]], repr(calls))
         self.assertNotIn(stored[self.d.secret_names["password"]], self.output.getvalue())
+        user_call = next(call for call in self.d.api.call_args_list if call.args[0].endswith("/users"))
+        self.assertEqual(user_call.args[0], f"https://sqladmin.googleapis.com/v1/projects/{self.d.project}/instances/{self.d.instance}/users")
 
     def test_build_exact_head_and_digest(self):
         revision = "a" * 40
