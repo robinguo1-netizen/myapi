@@ -148,10 +148,12 @@ export function Home() {
       headerProps={{
         className: 'text-white [&_a]:!text-white [&_button]:!text-white',
         unauthenticatedLabel: 'Get Started',
-        unauthenticatedHref: '/sign-up',
       }}
     >
-      <Hero isAuthenticated={isAuthenticated} />
+      <Hero
+        isAuthenticated={isAuthenticated}
+        registerEnabled={status?.register_enabled}
+      />
       <Features />
       <HowItWorks />
       <Footer name='RS API' />

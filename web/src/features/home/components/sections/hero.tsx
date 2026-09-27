@@ -25,11 +25,16 @@ import { Button } from '@/components/ui/button'
 
 interface HeroProps {
   isAuthenticated?: boolean
+  registerEnabled?: boolean
 }
 
 export function Hero(props: HeroProps) {
   const { t, i18n } = useTranslation()
-  const primaryDestination = props.isAuthenticated ? '/dashboard' : '/sign-up'
+  const guestDestination =
+    props.registerEnabled === false ? '/sign-in' : '/sign-up'
+  const primaryDestination = props.isAuthenticated
+    ? '/dashboard'
+    : guestDestination
   const headline = t('Make AI integration simpler for business.')
   const chineseHeadlineParts = i18n.resolvedLanguage?.startsWith('zh')
     ? headline.match(/^(.*?，)(.*)$/)

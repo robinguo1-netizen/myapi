@@ -28,6 +28,7 @@ import { ThemeSwitch } from '@/components/theme-switch'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useNotifications } from '@/hooks/use-notifications'
+import { useStatus } from '@/hooks/use-status'
 import { useSystemConfig } from '@/hooks/use-system-config'
 import { useTopNavLinks } from '@/hooks/use-top-nav-links'
 import { cn } from '@/lib/utils'
@@ -74,7 +75,6 @@ export function PublicHeader(props: PublicHeaderProps) {
     showAuthButtons = true,
     showNotifications = true,
     unauthenticatedLabel = 'Get Started',
-    unauthenticatedHref = '/sign-up',
   } = props
 
   const { t } = useTranslation()
@@ -86,6 +86,11 @@ export function PublicHeader(props: PublicHeaderProps) {
   const [authPromptSecondsLeft, setAuthPromptSecondsLeft] =
     useState(AUTH_PROMPT_SECONDS)
   const { auth } = useAuthStore()
+  const { status } = useStatus()
+  const defaultGuestDestination =
+    status?.register_enabled === false ? '/sign-in' : '/sign-up'
+  const unauthenticatedHref =
+    props.unauthenticatedHref ?? defaultGuestDestination
   const {
     systemName,
     logo: systemLogo,
