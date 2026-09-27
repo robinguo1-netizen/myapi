@@ -27,7 +27,7 @@ export function Features() {
     {
       title: t('One API, multiple models'),
       description: t(
-        'Use a consistent integration to access the models your business needs.'
+        'Use one consistent integration to access the models businesses and individuals need.'
       ),
       icon: Network,
     },

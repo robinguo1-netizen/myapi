@@ -227,6 +227,23 @@ describe('Landing page entry navigation', () => {
             </QueryClientProvider>
           )
         })
+        const header = container.querySelector('header')
+        assert.ok(header, 'the public header is visible')
+        assert.equal(
+          [...header.querySelectorAll('a')].some((link) =>
+            link.textContent?.includes('Developer documentation')
+          ),
+          false,
+          'the landing navigation does not send visitors to upstream docs'
+        )
+        assert.equal(
+          header.querySelector('img')?.getAttribute('src'),
+          '/rs-logo.svg'
+        )
+        assert.equal(
+          container.querySelector('footer img')?.getAttribute('src'),
+          '/rs-logo.svg'
+        )
         const startLinks = [...container.querySelectorAll('a')].filter((link) =>
           link.textContent?.includes('Get Started')
         )

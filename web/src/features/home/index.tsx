@@ -39,15 +39,8 @@ export function Home() {
   const { status } = useStatus()
   const isAuthenticated = !!auth.user
   const { content, isLoaded, isUrl } = useHomePageContent()
-  const docsUrl =
-    (status?.docs_link as string | undefined) || 'https://docs.newapi.pro'
   const homeNavLinks: TopNavLink[] = [
     { title: 'Models & pricing', href: '/pricing' },
-    {
-      title: 'Developer documentation',
-      href: docsUrl,
-      external: docsUrl.startsWith('http'),
-    },
     { title: 'Console', href: '/dashboard' },
   ]
 
@@ -139,11 +132,7 @@ export function Home() {
       showMainContainer={false}
       navLinks={homeNavLinks}
       siteName='RS API'
-      logo={
-        <span className='flex size-7 items-center justify-center rounded-lg bg-[#0073ed] text-[10px] font-bold tracking-[-0.04em] text-white shadow-sm'>
-          RS
-        </span>
-      }
+      logo={<img src='/rs-logo.svg' alt='RS API' className='size-7' />}
       showNotifications={false}
       headerProps={{
         className: 'text-white [&_a]:!text-white [&_button]:!text-white',

@@ -35,7 +35,7 @@ export function Hero(props: HeroProps) {
   const primaryDestination = props.isAuthenticated
     ? '/dashboard'
     : guestDestination
-  const headline = t('Make AI integration simpler for business.')
+  const headline = t('Make AI integration simpler for businesses and individuals.')
   const chineseHeadlineParts = i18n.resolvedLanguage?.startsWith('zh')
     ? headline.match(/^(.*?，)(.*)$/)
     : null
@@ -68,7 +68,7 @@ export function Hero(props: HeroProps) {
       <div className='relative mx-auto w-full max-w-7xl'>
         <div className='max-w-[42rem]'>
           <p className='landing-animate-fade-up mb-5 text-sm font-semibold tracking-[0.18em] text-[#72b9ff] uppercase opacity-0'>
-            {t('Connect AI capabilities for business')}
+            {t('Connect AI capabilities for businesses and individuals')}
           </p>
           <h1
             id='rs-hero-title'
@@ -91,7 +91,7 @@ export function Hero(props: HeroProps) {
             style={{ animationDelay: '140ms' }}
           >
             {t(
-              'Connect multiple models through one unified API. Start on your own, pay by usage, and keep usage and costs easy to understand.'
+              'Connect multiple models through one unified API. Businesses and individuals can get started on their own, pay by usage, and keep usage and costs easy to understand.'
             )}
           </p>
 
