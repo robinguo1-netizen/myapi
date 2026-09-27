@@ -1,0 +1,124 @@
+services:
+  app:
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+    image: rs-local-source:dev
+    container_name: rs-local-e2e-app
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${RS_APP_PORT:-3308}:3000"
+    volumes:
+      - rs_app_data:/data
+    environment:
+      PORT: "3000"
+      SQL_DSN: postgresql://${RS_DB_USER}:${RS_DB_PASSWORD}@postgres:5432/${RS_DB_NAME}?sslmode=disable
+      REDIS_CONN_STRING: redis://:${RS_REDIS_PASSWORD}@redis:6379/0
+      SESSION_SECRET: ${RS_SESSION_SECRET}
+      SESSION_COOKIE_SECURE: "false"
+      TRUSTED_PROXIES: none
+      NODE_NAME: rs-local-e2e
+      NODE_TYPE: master
+      TZ: Asia/Shanghai
+      ERROR_LOG_ENABLED: "true"
+      BATCH_UPDATE_ENABLED: "false"
+      SYNC_FREQUENCY: "2"
+      STREAMING_TIMEOUT: "30"
+      RELAY_TIMEOUT: "30"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      fake-upstream:
+        condition: service_healthy
+    networks:
+      - rs_local_net
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "wget -q -O - http://127.0.0.1:3000/api/status | grep -q '\"success\":true'",
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: rs-local-e2e-postgres
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${RS_POSTGRES_PORT:-15433}:5432"
+    environment:
+      POSTGRES_USER: ${RS_DB_USER}
+      POSTGRES_PASSWORD: ${RS_DB_PASSWORD}
+      POSTGRES_DB: ${RS_DB_NAME}
+    volumes:
+      - rs_pg_data:/var/lib/postgresql/data
+    networks:
+      - rs_local_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${RS_DB_USER} -d ${RS_DB_NAME}"]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+
+  redis:
+    image: redis:7-alpine
+    container_name: rs-local-e2e-redis
+    restart: unless-stopped
+    command:
+      ["redis-server", "--appendonly", "yes", "--requirepass", "${RS_REDIS_PASSWORD}"]
+    ports:
+      - "127.0.0.1:${RS_REDIS_PORT:-16380}:6379"
+    volumes:
+      - rs_redis_data:/data
+    networks:
+      - rs_local_net
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${RS_REDIS_PASSWORD}", "ping"]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+
+  fake-upstream:
+    image: python:3.12-alpine
+    container_name: rs-local-e2e-upstream
+    restart: unless-stopped
+    command: ["python", "/srv/fake_upstream.py"]
+    ports:
+      - "127.0.0.1:${RS_UPSTREAM_PORT:-18081}:8080"
+    volumes:
+      - ./fake_upstream.py:/srv/fake_upstream.py:ro
+    environment:
+      RS_UPSTREAM_KEY: ${RS_UPSTREAM_KEY}
+      RS_UPSTREAM_MODEL: ${RS_UPSTREAM_MODEL:-gpt-3.5-turbo}
+    networks:
+      - rs_local_net
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "-q",
+          "-O",
+          "-",
+          "http://127.0.0.1:8080/healthz",
+        ]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+
+volumes:
+  rs_app_data:
+    name: rs-local-e2e-app-data
+  rs_pg_data:
+    name: rs-local-e2e-pg-data
+  rs_redis_data:
+    name: rs-local-e2e-redis-data
+
+networks:
+  rs_local_net:
+    name: rs-local-e2e-net
+    driver: bridge
