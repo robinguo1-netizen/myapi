@@ -1,84 +1,85 @@
-# RS API Google Cloud 测试版准备说明
+# RS API Google Cloud 内部功能测试部署
 
-本文只描述部署准备，不会创建云资源、推送代码或镜像、触发 Cloud Build、修改 IAM 或公开服务。
+RS API 基于 **new-api / QuantumNous** 开发；本流程构建现有 new-api Go 服务与 RS 前端，保留上游项目归属、许可证和版权信息。原生产 Dockerfile 的最终入口仍为 `/new-api`。
 
-## 已知目标
+本目录提供显式、分阶段的部署流程。`deploy.py` 默认只输出计划；`provision`、`budget`、`build`、`deploy`、`bootstrap`、`publish` 会按名称创建资源或改变配置。必须先核对目标项目及现有资源，不能将此脚本直接用于其他已有业务环境。
 
-- Google Cloud 项目：`project-0338f2b7-06cf-4c5a-989`
-- Cloud Run 服务：`superapi`
-- 区域：`europe-west1`
-- 当前 Cloud Build 触发器连接公开但为空的 GitHub 仓库 `robinguo1-netizen/myapi`，分支规则为 `^main$`。
-- 当前触发器配置使用 buildpacks，不使用本仓库 Dockerfile。向 `main` 推送可能立即触发构建和部署，因此在仓库公开性、费用和发布策略确认前不得推送。
+## 已确认范围
 
-## 推荐部署形态
+- Google Cloud 项目：`project-0338f2b7-06cf-4c5a-989`，区域：`europe-west1`，Cloud Run 服务：`superapi`。
+- 面向中国大陆以外地区的 2–3 名内部测试人员，公网 HTTPS 可访问，不设置 IAP、IP 白名单或额外网关。
+- 保留应用自身的登录、角色权限和 API Key 验证；首次初始化完成后关闭公开注册。
+- 月费用目标低于 USD 200。预算告警不是总费用硬上限；实例上限也不是精确的计费上限。数据库、存储、构建、出站流量和未来真实模型调用均需计入。
+- 不改变现有 GitHub `^main$` buildpacks 自动触发器。应用代码位于 `rs-api-delivery-20260927` 分支；受控构建使用本仓库根 `Dockerfile`，不要向 `main` 推送来试图触发本流程。
 
-1. 使用根目录 `Dockerfile` 构建当前源码和 RS 前端。镜像监听 Cloud Run 注入的 `PORT`；应用现有实现已经读取该变量。
-2. 使用 Cloud SQL for PostgreSQL 保存主数据和日志。测试版也必须启用持久化，不使用容器文件系统或 SQLite。
-3. 多实例、较高并发或需要共享缓存时使用 Memorystore for Redis。无 Redis 的低流量试运营必须限制为最大 1 个实例；扩容前必须补齐并验证共享缓存、分布式限流和跨实例状态一致性。
-4. `SESSION_SECRET`、数据库密码和 Redis 密码放入 Secret Manager，以运行时引用方式注入；不要写入仓库、镜像层、Cloud Build substitution 或普通环境变量文件。
-5. 仅通过 Cloud Run HTTPS 域名访问，设置 `SESSION_COOKIE_SECURE=true`，并将最终精确 HTTPS Origin 写入 `SESSION_COOKIE_TRUSTED_URL`。
-6. Cloud Run 请求超时应大于应用 `STREAMING_TIMEOUT`。建议测试版 Cloud Run 请求超时 300 秒、应用流式无响应超时 240 秒；这两个值只管理请求生命周期，不延长实例关机窗口。Cloud Run 发送 `SIGTERM` 后约 10 秒会强制终止实例，因此应用 `SHUTDOWN_TIMEOUT_SECONDS` 建议设置为 8 秒。
-7. Cloud SQL 与 Redis 使用私网连接或受控连接器；不要为数据库、Redis 开放公共入站端口。
+公网地址即使未主动公开，也可能被扫描。这里不额外增加访问控制，但不能关闭应用鉴权或将数据库、管理密钥直接暴露。
 
-## Docker 与端口
+## 最小测试规格
 
-现有生产 `Dockerfile` 会先构建 React 前端，再构建 Go 二进制，最终镜像入口为 `/new-api`。Cloud Run 会注入 `PORT`，无需硬编码 `8080`。本地完整联调使用同一个 Dockerfile，避免旧官方镜像与当前源码不一致。
+| 项目 | 配置 |
+| --- | --- |
+| Cloud Run | 1 vCPU、1 GiB；服务和修订版本均最大 1 实例、最小 0；并发 10 |
+| CPU 与超时 | instance-based CPU（不节流），不启用 startup CPU boost；请求超时 300 秒，流式无响应超时 240 秒，关机清理 8 秒 |
+| PostgreSQL | Cloud SQL PostgreSQL 16 Enterprise，`db-f1-micro`，单可用区，SSD 10 GB，无高可用、无自动扩盘 |
+| 数据持久化 | 数据库 `rs_api`，用户 `rs_app`；每天备份，保留 3 份；测试阶段不启用 PITR |
+| 数据库连接 | Cloud SQL Auth Proxy Unix socket；数据库启用公网 IP 供连接器使用，但强制连接器、没有公网授权网段 |
+| 缓存 | 不部署 Redis，应用使用进程内缓存；`BATCH_UPDATE_ENABLED=false`，SQL 连接池 idle 2 / open 10 |
+| 密钥 | Secret Manager 中保存密码、DSN、稳定会话密钥和初始管理员凭证；运行账号仅可读取 DSN、会话密钥 |
+| 其他 | 不创建 VPC connector、负载均衡器、IAP 或 Cloud Armor |
 
-当前 buildpacks 触发器不会自动采用 Dockerfile。后续需在以下两种方案中确认一种：
+低流量时 Cloud Run 可缩至零；Cloud SQL 即使无人使用仍持续收费。价格因区域、流量与计费规则而异，以 [Cloud Run 价格](https://cloud.google.com/run/pricing) 和 [Cloud SQL 价格](https://cloud.google.com/sql/pricing) 为准。脚本可创建 USD 200 的项目级月预算，在 USD 50 / 100 / 160 / 200 发送告警，发送到默认账单联系人；执行者必须有相应账单预算权限。
 
-- 将触发器改为显式 Dockerfile 构建、推送 Artifact Registry 并部署 Cloud Run；或
-- 暂停/隔离现有自动部署触发器，先由受控发布流程构建同一 Dockerfile，再人工批准部署。
+## 本机或 Cloud Shell 运行
 
-在确认前不要向已连接仓库的 `main` 推送。
+需要 Python 3.9+、Git、tar 和支持相关标志的 Google Cloud CLI（本流程按 586.0.0 检查）。执行账号需已登录，且有操作目标项目资源、服务账号及预算的权限。不要将 OAuth token、密码或真实 DSN 复制到仓库或终端命令参数中。
 
-## Secret Manager 参数
+```sh
+python3 deploy/google-cloud/deploy.py plan
+python3 deploy/google-cloud/deploy.py inspect
+python3 -m unittest discover -s deploy/google-cloud -p 'test_*.py'
+```
 
-最低必需：
+`inspect` 只报告所选安全配置字段和环境变量名称，不输出环境变量值、任意 annotations 或密钥。先核对已有 `superapi` 是否仅为未成功构建的占位服务；如发现真实业务，不要直接覆盖。
 
-- `RS_DATABASE_DSN` → `SQL_DSN`
-- `RS_SESSION_SECRET` → `SESSION_SECRET`
+可通过 `--gcloud /绝对路径/gcloud` 或 `RS_GCLOUD` 指定 CLI。使用独立 `CLOUDSDK_CONFIG` 时，该目录必须被 Git 与 Docker 排除，权限建议为 `700`。
 
-使用 Redis 时再增加：
+```sh
+python3 deploy/google-cloud/deploy.py budget
+python3 deploy/google-cloud/deploy.py provision
+python3 deploy/google-cloud/deploy.py build
+python3 deploy/google-cloud/deploy.py deploy --image 'europe-west1-docker.pkg.dev/PROJECT/rs-test/new-api@sha256:BUILD_RETURNED_DIGEST'
+python3 deploy/google-cloud/deploy.py bootstrap
+python3 deploy/google-cloud/deploy.py publish
+python3 deploy/google-cloud/deploy.py verify
+```
 
-- `RS_REDIS_DSN` → `REDIS_CONN_STRING`
+镜像参数必须替换成 `build` 实际输出的完整 digest。构建使用**确切的 Git HEAD archive**，不带本机未跟踪文件或忽略文件；未提交的应用更改会阻止构建。先审查并提交需要上线的应用变更。部署辅助目录的未提交修改可以用于运行流程，但不会悄悄混入应用源码镜像。
 
-如果后续接入真实模型供应商、支付或邮件服务，每个供应商密钥应使用独立 Secret，并按最小权限绑定到 Cloud Run 运行服务账号。
+`provision` 使用专用构建和运行服务账号、Artifact Registry 仓库及源码暂存 bucket。源码对象 7 天过期；镜像目前不自动清理，反复构建后应按已确认的保留策略清理。脚本不会删除旧资源，也不会自动放宽不符合计划的现有 SQL 配置；部分完成后可检查再重跑对应阶段。
 
-## PostgreSQL 持久化与连接
+## 初始化与公开顺序
 
-- 使用独立测试数据库和最小权限数据库用户。
-- 启用自动备份和时间点恢复；迁移前创建按需备份。
-- 初始连接池建议 `SQL_MAX_IDLE_CONNS=10`、`SQL_MAX_OPEN_CONNS=30`，再根据 Cloud Run 最大实例数和 Cloud SQL 总连接上限调整。
-- 计算约束：`最大实例数 × 每实例 SQL_MAX_OPEN_CONNS` 必须明显低于数据库连接上限，并为运维和迁移保留余量。
-- DSN 使用 TLS，例如 `sslmode=require`；生产验收应进一步校验证书策略。
+1. `deploy` 暂时启用 Cloud Run IAM 校验，移除公共 invoker 绑定，部署不可匿名访问的修订版本。
+2. `bootstrap` 先确认匿名 `/api/setup` 被拒绝，再初始化 root 管理员，验证登录并将 `RegisterEnabled`、`PasswordRegisterEnabled` 都设为 false。
+3. `publish` 再检查初始化、注册关闭和应用鉴权，随后关闭 Cloud Run invoker IAM 校验，成为用户要求的公网测试服务。
+4. `verify` 不发送 Google 身份 token，以真正匿名访问方式复核公网状态、关闭注册和应用鉴权。
 
-## 会话、限流与流式响应
+暂时的 IAM 保护只用于避免首次启动时他人抢先创建管理员，不是最终用户访问门槛。Google 身份验证使用 `X-Serverless-Authorization`，不会覆盖应用的 `Authorization` Bearer token。应用管理员凭证保存在 `${SERVICE}-admin-login` Secret 中；不要在聊天、日志或公开文档中粘贴。
 
-- HTTPS 下必须启用 Secure Cookie 和精确 Origin 校验。
-- 明确 Cloud Run 反向代理地址范围后再设置 `TRUSTED_PROXIES`，不要长期依赖宽泛默认值。
-- 应用限流只是一层保护；公网测试版还应设置 Cloud Armor/API Gateway 或等效边界策略，并为登录、注册、密钥和转发接口设置告警。
-- 保持 SSE/流式响应链路不启用会缓冲整个响应的代理设置。
-- Cloud Run 请求超时、应用 `RELAY_TIMEOUT`、流式无响应超时 `STREAMING_TIMEOUT` 与客户端超时需要成组配置，但均不能保证请求在实例收到 `SIGTERM` 后继续运行。关机清理必须在 Cloud Run 约 10 秒的窗口内结束。
-- 低流量、request-based CPU、scale-to-zero 的初始配置使用 `BATCH_UPDATE_ENABLED=false`，避免把扣费正确性依赖于闲置期内存定时 flush。启用批量扣费前必须单独验证实例冻结、终止和重试场景。
-- 应用存在后台同步和定时任务；使用 request-based CPU 时必须验证这些任务在无请求期间的行为。若任务必须持续运行，应评估 instance-based CPU、最小实例或拆分为专用作业，而不是默认假定 scale-to-zero 下仍会执行。
+若已有数据库或 root 用户，脚本不会覆盖其凭证。如果已存在的管理员密码与此 Secret 不匹配，必须人工核对，而不是重新初始化数据库。
 
-## 待用户确认的最低规格
+## 应用配置与限制
 
-在创建任何收费资源前需要确认：
+- Cloud Run 自动注入 `PORT`；用 `--port=8080` 配置，不向环境变量手动写 `PORT`。
+- PostgreSQL DSN 使用 `postgresql://` 协议和 `/cloudsql/PROJECT:REGION:INSTANCE` socket；`sslmode=disable` 只用于本地 socket，外层由 Cloud SQL Auth Proxy 提供认证与加密，不是开放不加密的远程数据库连接。参见 [Cloud Run 连接 PostgreSQL](https://docs.cloud.google.com/sql/docs/postgres/connect-run)。
+- HTTPS Cookie 启用 Secure，并使用部署后精确 Origin。`SESSION_SECRET` 固定存放在 Secret Manager，不随修订版本随机变化。
+- `TRUSTED_PROXIES=none` 忽略客户端伪造的转发 IP；初始测试人员可能共享限流计数。不要直接改成 `*` 或 `0.0.0.0/0`。
+- 不启用 Redis 时，限流与部分聚合缓存属于单实例内存状态，会随重启重置。扩展到多实例前应验证共享缓存、分布式限流与会话/账务一致性。
+- instance-based CPU 支持请求结束后的退款等后台操作，但实例缩零或终止仍会结束进程。现有退款 goroutine 没有完整关机排空保证；部署或切换修订版本前应停止测试请求，不运行依赖长后台任务的视频等流程。
+- 核心余额与消费日志直接落 PostgreSQL；部分仪表盘聚合依赖定时刷新。`verify` 是部署冒烟测试，**不等于完整业务验收**。
 
-1. 客户主要地域和可接受延迟；当前 `europe-west1` 是否继续使用。
-2. 云月预算上限以及是否允许 Cloud SQL 高可用、自动备份和 Memorystore。
-3. GitHub 仓库是否可以继续公开；若不能，应先改为私有并复核 Cloud Build 连接权限。
-4. Cloud Run 测试版是否保持仅授权访问，何时允许公网访问。
-5. 初始建议：Cloud Run 1 vCPU / 1 GiB、最小实例 0、并发 20。未启用 Redis 时最大实例 1；启用并验证共享状态后才考虑最大实例 2。Cloud SQL 先选共享核心测试规格并启用持久化备份。具体 SKU 必须根据预算和地域确认后选择。
-6. Redis 是首发即启用，还是仅在多实例/压测前启用。
-7. 自定义域名、DNS、邮件、真实模型供应商和支付服务的责任方与启用时点。
+## 上云后验收与维护
 
-## 上云前验收门槛
+需另外验证实际登录、普通账号/API Key 管理、流式与非流式转发、成功扣费与日志一致、上游失败退款、无效/撤销密钥、余额不足，以及重启后的会话和数据持久化。没有真实模型供应商配置时，只能验收假上游或无上游路径，不能声称真实模型调用已通过。
 
-- 本地 PostgreSQL + Redis + 当前源码完整链路通过。
-- 普通用户和管理员浏览器入口通过，无 504。
-- 无效密钥、撤销密钥、余额不足均被拒绝。
-- 非流式和流式请求、扣费、日志均通过本地可预测假上游验证。
-- 镜像漏洞扫描、数据库备份恢复演练、Secret 轮换方案和回滚步骤完成。
-- 明确仓库可见性、区域、预算和公网策略后，才允许创建或修改收费云资源。
+最低规格无高可用、无 PITR，适合功能测试而非正式生产。生产前还需真实供应商费用保护、备份恢复演练、漏洞扫描、Secret 轮换和可验证回滚方案。回滚应用镜像前先确认数据库迁移兼容性；保留旧镜像不代表数据库可安全降级。暂停测试时仅缩零 Cloud Run 不会停止 Cloud SQL 的费用，删除或停用收费资源须另行确认数据保留要求。
