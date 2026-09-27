@@ -2,7 +2,7 @@
 # Source is a temporary git archive; local secrets and ignored files are absent.
 steps:
   - name: gcr.io/cloud-builders/docker
-    args: [build, --platform=linux/amd64, --tag, '${_IMAGE}', --file, Dockerfile, .]
+    args: [build, --platform=linux/amd64, --label, 'org.opencontainers.image.revision=${COMMIT_SHA}', --tag, '${_IMAGE}', --file, Dockerfile, .]
 images:
   - '${_IMAGE}'
 options:

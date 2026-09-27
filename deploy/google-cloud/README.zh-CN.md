@@ -80,6 +80,10 @@ python3 deploy/google-cloud/deploy.py verify
 
 ## 上云后验收与维护
 
+发布后可运行 `python3 deploy/google-cloud/acceptance.py`：创建或复用 `rstest` 内部普通账号（凭证只保存在 Secret Manager），检查前端资源、登录、角色隔离、API Key 生命周期和账务无变化。临时 key 会清理，内部账号保留。`--verify-only` 不创建账号/key/secret，但登录会创建会话；`--self-test` 完全离线。
+
+完成一次默认验收后，停止发起测试请求，部署相同镜像的新修订版本；14 分钟内运行 `python3 deploy/google-cloud/acceptance.py --persistence-check`，用之前保存的短期会话验证跨修订版本的数据和登录持久性。快照仅存放在被忽略的 `.local-tests/google-cloud/`，权限为 `600`，不可提交。
+
 需另外验证实际登录、普通账号/API Key 管理、流式与非流式转发、成功扣费与日志一致、上游失败退款、无效/撤销密钥、余额不足，以及重启后的会话和数据持久化。没有真实模型供应商配置时，只能验收假上游或无上游路径，不能声称真实模型调用已通过。
 
 最低规格无高可用、无 PITR，适合功能测试而非正式生产。生产前还需真实供应商费用保护、备份恢复演练、漏洞扫描、Secret 轮换和可验证回滚方案。回滚应用镜像前先确认数据库迁移兼容性；保留旧镜像不代表数据库可安全降级。暂停测试时仅缩零 Cloud Run 不会停止 Cloud SQL 的费用，删除或停用收费资源须另行确认数据保留要求。
