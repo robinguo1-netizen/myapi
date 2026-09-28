@@ -286,7 +286,9 @@ class Deployment:
         digest = next((item.get("digest") for item in images if item.get("name") == image), None)
         if not digest:
             raise DeploymentError("Cloud Build succeeded but did not return the expected image digest")
-        print(json.dumps({"source_commit": revision, "build_id": result["id"], "image": f"{image.split(':')[0]}@{digest}"}, indent=2))
+        release = {"source_commit": revision, "build_id": result["id"], "image": f"{image.split(':')[0]}@{digest}"}
+        print(json.dumps(release, indent=2))
+        return release
 
     def protect_bootstrap(self, service):
         if service is None:

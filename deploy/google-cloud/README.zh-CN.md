@@ -39,6 +39,21 @@ python3 deploy/google-cloud/deploy.py inspect
 python3 -m unittest discover -s deploy/google-cloud -p 'test_*.py'
 ```
 
+## 后续迭代：一键更新
+
+首次部署完成后，在仓库的 `rs-api-delivery-20260927` 分支审查并提交本次改动，再运行：
+
+```sh
+python3 deploy/google-cloud/release.py --check
+python3 deploy/google-cloud/release.py
+```
+
+第二条是一键发布命令：先运行本地部署测试，核对工作区干净、分支及 GitHub 地址；随后安全地推送到 `github/rs-api-delivery-20260927` 并复核远端 SHA；只用该提交构建镜像；在现有 Cloud Run 服务创建**零流量**新修订版本，待其就绪后切换 100% 流量，最后检查公网 HTTPS、关闭注册和应用鉴权。`--check` 只做本地预检，不推送或访问云端。需要已登录的 GitHub（若安装 `gh`，命令会使用其 Git 凭证）和 Google Cloud CLI；脚本不会替你提交代码或更新 `main`。
+
+命令固定到本测试项目 `project-0338f2b7-06cf-4c5a-989` / `europe-west1` / `superapi`，不重新创建预算、数据库或密钥，也不改变既有服务的其他配置。GitHub 推送或复核失败时不会开始云构建；构建失败或新修订版本未就绪时旧版本继续服务。切流后的冒烟检查失败时，脚本尝试将流量切回旧修订版本并验证结果。若回滚无法确认，须立即人工检查 Cloud Run；数据库迁移不一定能随应用流量回滚。不要在测试人员正在执行支付或其他长任务时发布。
+
+如果 GitHub 成功但云构建或部署失败，代码会暂时领先线上版本；修复原因后可重跑相同命令。Cloud Build 与保留的镜像仍可能产生少量费用，预算告警不是硬上限。
+
 `inspect` 只报告所选安全配置字段和环境变量名称，不输出环境变量值、任意 annotations 或密钥。先核对已有 `superapi` 是否仅为未成功构建的占位服务；如发现真实业务，不要直接覆盖。
 
 可通过 `--gcloud /绝对路径/gcloud` 或 `RS_GCLOUD` 指定 CLI。使用独立 `CLOUDSDK_CONFIG` 时，该目录必须被 Git 与 Docker 排除，权限建议为 `700`。
