@@ -278,7 +278,7 @@ describe('Landing page entry navigation', () => {
         )
         assert.ok(
           container.querySelector(
-            'img[alt="薄荷色玻璃盾牌与绿色环带守护 AI Token"]'
+            'img[alt="清晰的账单明细、降费箭头与小对号，四周环绕彩色 AI 模型圆盘和同色丝带"]'
           )
         )
         await act(async () => {

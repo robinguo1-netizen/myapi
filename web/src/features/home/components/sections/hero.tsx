@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 import { Link } from '@tanstack/react-router'
-import { ArrowRight, Check, ShieldCheck, Wallet } from 'lucide-react'
+import { ArrowRight, Check, ReceiptText, Wallet } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
@@ -112,18 +112,18 @@ export function Hero(props: HeroProps) {
         </div>
         <div className='relative mx-auto w-full max-w-xl lg:max-w-none'>
           <img
-            src='/cheapersafer-hero.png'
+            src='/cheapersafer-hero-models.png'
             alt={t(
-              'A mint glass shield protects AI tokens inside an efficient green routing loop'
+              'A clear itemized bill with lower-cost arrows and checkmarks, surrounded by colorful AI model discs and a matching ribbon'
             )}
             width={1536}
             height={1024}
             fetchPriority='high'
-            className='aspect-[1.12] w-full rounded-[2rem] object-cover object-[75%_center] mix-blend-multiply'
+            className='aspect-[1.12] w-full rounded-[2rem] object-cover object-right mix-blend-multiply'
           />
-          <div className='absolute top-[12%] right-0 flex items-center gap-2.5 rounded-2xl border border-white/90 bg-white/90 px-4 py-3 text-sm shadow-[0_12px_32px_rgba(20,61,50,0.08)] backdrop-blur-sm'>
-            <ShieldCheck aria-hidden='true' className='size-5 text-[#1d7658]' />
-            <span>{t('Your keys. Your control.')}</span>
+          <div className='absolute top-0 left-0 flex -translate-y-1/2 items-center gap-2.5 rounded-2xl border border-white/90 bg-white/90 px-4 py-3 text-sm shadow-[0_12px_32px_rgba(20,61,50,0.08)] backdrop-blur-sm'>
+            <ReceiptText aria-hidden='true' className='size-5 text-[#1d7658]' />
+            <span>{t('Usage and costs made clear')}</span>
           </div>
           <div className='absolute bottom-[6%] left-0 flex items-center gap-2.5 rounded-2xl border border-white/90 bg-white/90 px-4 py-3 text-sm shadow-[0_12px_32px_rgba(20,61,50,0.08)] backdrop-blur-sm'>
             <Wallet aria-hidden='true' className='size-5 text-[#1d7658]' />
