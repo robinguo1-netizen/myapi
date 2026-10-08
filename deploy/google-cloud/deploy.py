@@ -57,6 +57,11 @@ class Deployment:
         self.service = args.service
         self.instance = args.sql_instance
         self.repository = args.repository
+        self.database = getattr(args, "database", "rs_api")
+        self.database_user = getattr(args, "database_user", "rs_app")
+        self.admin_username = getattr(args, "admin_username", "rsadmin")
+        self.managed_by = getattr(args, "managed_by", "rs-test-deploy")
+        self.source_bucket = getattr(args, "source_bucket", None) or f"{self.project}-rs-build-source"
         self.runtime = f"{self.service}-runtime@{self.project}.iam.gserviceaccount.com"
         self.builder = f"{self.service}-builder@{self.project}.iam.gserviceaccount.com"
         self.connection = f"{self.project}:{self.region}:{self.instance}"
@@ -105,7 +110,7 @@ class Deployment:
                           "storage_auto_increase": False, "retained_daily_backups": 3,
                           "point_in_time_recovery": False, "public_ip_with_connector_only": True,
                           "authorized_networks": [], "deletion_protection": True},
-            "database": "rs_api", "database_user": "rs_app",
+            "database": self.database, "database_user": self.database_user,
             "runtime_service_account": self.runtime, "build_service_account": self.builder,
             "artifact_registry": f"{self.region}/{self.repository}",
             "secrets": self.secret_names,
@@ -149,7 +154,7 @@ class Deployment:
         if not any(item["name"].rsplit("/", 1)[-1] == name for item in names):
             if initial is None:
                 raise DeploymentError(f"Missing required secret {name}; run provision first")
-            self.gc("secrets", "create", name, "--replication-policy=user-managed", f"--locations={self.region}", "--labels=managed-by=rs-test-deploy")
+            self.gc("secrets", "create", name, "--replication-policy=user-managed", f"--locations={self.region}", f"--labels=managed-by={self.managed_by}")
         versions = self.gc("secrets", "versions", "list", name, "--filter=state=ENABLED")
         if not versions:
             if initial is None:
@@ -185,7 +190,7 @@ class Deployment:
             self.gc("services", "enable", *missing)
 
         accounts = {item["email"] for item in self.gc("iam", "service-accounts", "list")}
-        for email, title in ((self.runtime, "RS test runtime"), (self.builder, "RS test image builder")):
+        for email, title in ((self.runtime, f"{self.service} runtime"), (self.builder, f"{self.service} image builder")):
             if email not in accounts:
                 self.gc("iam", "service-accounts", "create", email.split("@", 1)[0], f"--display-name={title}")
         # Build service account can write this repository, not arbitrary registries.
@@ -194,13 +199,13 @@ class Deployment:
         if matching and matching[0].get("format") != "DOCKER":
             raise DeploymentError("Existing Artifact Registry repository is not Docker format")
         if not matching:
-            self.gc("artifacts", "repositories", "create", self.repository, f"--location={self.region}", "--repository-format=docker", "--description=RS new-api test releases")
+            self.gc("artifacts", "repositories", "create", self.repository, f"--location={self.region}", "--repository-format=docker", f"--description={self.service} new-api releases")
         self.grant(["artifacts", "repositories", self.repository, f"--location={self.region}"], f"serviceAccount:{self.builder}", "roles/artifactregistry.writer")
         self.grant(["projects", self.project], f"serviceAccount:{self.builder}", "roles/logging.logWriter")
         self.grant(["projects", self.project], f"serviceAccount:{self.runtime}", "roles/cloudsql.client")
 
         # Dedicated source bucket: retained archives expire; no broad project storage role.
-        bucket = f"{self.project}-rs-build-source"
+        bucket = self.source_bucket
         buckets = self.gc("storage", "buckets", "list")
         if not any(item.get("name", "").removeprefix("gs://").rstrip("/") == bucket for item in buckets):
             self.gc("storage", "buckets", "create", f"gs://{bucket}", f"--location={self.region}", "--uniform-bucket-level-access", "--public-access-prevention")
@@ -221,21 +226,21 @@ class Deployment:
             # Check API defaults (especially PITR) rather than assuming they match the plan.
             self.check_sql_profile(self.gc("sql", "instances", "describe", self.instance))
         databases = self.gc("sql", "databases", "list", f"--instance={self.instance}")
-        if not any(item["name"] == "rs_api" for item in databases):
-            self.gc("sql", "databases", "create", "rs_api", f"--instance={self.instance}")
+        if not any(item["name"] == self.database for item in databases):
+            self.gc("sql", "databases", "create", self.database, f"--instance={self.instance}")
         password, _ = self.secret(self.secret_names["password"], lambda: secrets.token_urlsafe(36))
         users = self.gc("sql", "users", "list", f"--instance={self.instance}")
-        if not any(item["name"] == "rs_app" for item in users):
-            operation = self.api(f"https://sqladmin.googleapis.com/v1/projects/{self.project}/instances/{self.instance}/users", "POST", {"name": "rs_app", "password": password, "type": "BUILT_IN"})
+        if not any(item["name"] == self.database_user for item in users):
+            operation = self.api(f"https://sqladmin.googleapis.com/v1/projects/{self.project}/instances/{self.instance}/users", "POST", {"name": self.database_user, "password": password, "type": "BUILT_IN"})
             self.gc("sql", "operations", "wait", operation["name"], "--timeout=600")
         query = urllib.parse.urlencode({"host": f"/cloudsql/{self.connection}", "sslmode": "disable"})
-        dsn = f"postgresql://rs_app:{urllib.parse.quote(password, safe='')}@/rs_api?{query}"
+        dsn = f"postgresql://{self.database_user}:{urllib.parse.quote(password, safe='')}@/{self.database}?{query}"
         stored_dsn, _ = self.secret(self.secret_names["dsn"], dsn)
         if stored_dsn != dsn:
             raise DeploymentError("Stored SQL DSN differs from the selected instance/user; inspect secrets before changing an existing database connection")
         self.secret(self.secret_names["session"], lambda: secrets.token_urlsafe(48))
         # 15 bytes encode to 20 URL-safe characters, matching model.User's max20.
-        self.secret(self.secret_names["admin"], lambda: json.dumps({"username": "rsadmin", "password": secrets.token_urlsafe(15)}))
+        self.secret(self.secret_names["admin"], lambda: json.dumps({"username": self.admin_username, "password": secrets.token_urlsafe(15)}))
         for key in ("dsn", "session"):
             self.grant(["secrets", self.secret_names[key]], f"serviceAccount:{self.runtime}", "roles/secretmanager.secretAccessor")
         print("Provisioning complete; credentials are in Secret Manager and have not been printed.")
@@ -277,7 +282,7 @@ class Deployment:
             execute(["tar", "-x", "-C", directory], input_bytes=archive, raw=True)
             build = self.gc("builds", "submit", directory, f"--region={self.region}", f"--config={HERE / 'cloudbuild.yaml'}",
                             f"--service-account=projects/{self.project}/serviceAccounts/{self.builder}",
-                            f"--gcs-source-staging-dir=gs://{self.project}-rs-build-source/source",
+                            f"--gcs-source-staging-dir=gs://{self.source_bucket}/source",
                             f"--substitutions=_IMAGE={image},COMMIT_SHA={revision}", "--timeout=1800s")
         result = build[0] if isinstance(build, list) else build
         if result.get("status") != "SUCCESS":
@@ -329,7 +334,7 @@ class Deployment:
                 "--clear-vpc-connector", "--clear-network", f"--set-cloudsql-instances={self.connection}",
                 f"--set-env-vars={env_flag}",
                 f"--set-secrets=SQL_DSN={self.secret_names['dsn']}:{dsn_version},SESSION_SECRET={self.secret_names['session']}:{session_version}",
-                "--labels=managed-by=rs-test-deploy,purpose=internal-functional-test")
+                f"--labels=managed-by={self.managed_by},purpose=internal-functional-test")
         service = self.service_info()
         url = service["status"]["url"]
         if url != origin:
@@ -378,6 +383,9 @@ class Deployment:
         token = login["access_token"]
         for key in ("RegisterEnabled", "PasswordRegisterEnabled"):
             self.app_success(url, "/api/option/", "PUT", {"key": key, "value": "false"}, admin_token=token)
+        if getattr(self.args, "brand_name", None):
+            for key, value in (("SystemName", self.args.brand_name), ("Logo", self.args.brand_logo), ("ServerAddress", url)):
+                self.app_success(url, "/api/option/", "PUT", {"key": key, "value": value}, admin_token=token)
         self.check_application(url)
         print(f"Admin initialized and public registration disabled. Login credentials remain in Secret Manager: {self.secret_names['admin']}. Safe to run publish.")
 
