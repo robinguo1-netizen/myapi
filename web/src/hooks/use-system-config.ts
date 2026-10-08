@@ -18,8 +18,9 @@ For commercial licensing, please contact support@quantumnous.com
 */
 import { useEffect, useCallback } from 'react'
 
-import { DEFAULT_SYSTEM_NAME, DEFAULT_LOGO } from '@/lib/constants'
+import { DEFAULT_LOGO } from '@/lib/constants'
 import { applyFaviconToDom } from '@/lib/dom-utils'
+import { normalizeSystemBrand } from '@/lib/system-brand'
 import {
   useSystemConfigStore,
   type CurrencyConfig,
@@ -93,11 +94,7 @@ export function mapStatusDataToConfig(
   }
 
   return {
-    systemName:
-      !data.system_name || data.system_name === 'New API'
-        ? DEFAULT_SYSTEM_NAME
-        : data.system_name,
-    logo: !data.logo || data.logo === '/logo.png' ? DEFAULT_LOGO : data.logo,
+    ...normalizeSystemBrand(data.system_name, data.logo),
     footerHtml: data.footer_html,
     demoSiteEnabled: data.demo_site_enabled,
     displayTokenStatEnabled: data.display_token_stat_enabled,

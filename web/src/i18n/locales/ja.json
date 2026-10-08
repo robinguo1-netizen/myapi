@@ -2046,7 +2046,7 @@
     "footer.columns.related.links.oneApi": "1つのAPI",
     "footer.columns.related.title": "関連プロジェクト",
     "footer.defaultCopyright": "すべての権利を留保します。",
-    "footer.new\u0061pi.projectAttributionSuffix": "すべての権利を留保します。プロジェクトコントリビューターにより設計・開発されています。",
+    "footer.newapi.projectAttributionSuffix": "すべての権利を留保します。プロジェクトコントリビューターにより設計・開発されています。",
     "For channels added after May 10, 2025, no need to remove \".\" from model names during deployment": "2025 年 5 月 10 日以降に追加されたチャネルの場合、デプロイ時にモデル名から「.」を削除する必要はありません",
     "For private deployments, format: https://fastgpt.run/api/openapi": "プライベートデプロイメントの場合、形式: https://fastgpt.run/api/openapi",
     "For security, existing access tokens cannot be displayed. Regenerate only when you need a new token.": "セキュリティ上、既存のアクセストークンは再表示できません。新しいトークンが必要な場合のみ再生成してください。",
@@ -5294,6 +5294,17 @@
     "Use the unified endpoint to send your first model request.": "統一エンドポイントから最初のモデルリクエストを送信します。",
     "View models and pricing": "モデルと料金を見る",
     "Workspace": "ワークスペース",
-    "Send from your client, then inspect the request log": "クライアントから送信し、リクエストログを確認します"
+    "Send from your client, then inspect the request log": "クライアントから送信し、リクエストログを確認します",
+    "Cheaper to use. Safer to build.": "利用はお得に。開発は安心に。",
+    "Make every Token": "すべての Token を、",
+    "cheaper, and safer.": "もっとお得に、もっと安心に。",
+    "One API for multiple AI models. Pay for what you use, manage keys and quotas, and see where every Token goes. Built for businesses and individuals.": "複数の AI モデルをひとつの API で。従量課金、キーと上限の管理、Token 使用量の可視化。企業にも個人にも。",
+    "Your keys. Your control.": "キーは自分で管理。",
+    "Every Token, accounted for.": "すべての Token を見える化。",
+    "A simpler way to connect with AI": "AI へのアクセスを、シンプルに",
+    "Spend wisely. Build confidently.": "賢く使って、安心して開発。",
+    "More value from every Token.": "すべての Token に、もっと価値を。",
+    "A mint glass shield protects AI tokens inside an efficient green routing loop": "緑のループの中で AI Token を守るミント色のガラスの盾",
+    "One API / More possibilities": "ひとつの API / 広がる可能性"
   }
 }

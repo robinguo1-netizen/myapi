@@ -46,10 +46,10 @@ export function HowItWorks() {
   ]
 
   return (
-    <section className='bg-white px-6 py-20 text-[#07182e] md:py-28'>
+    <section className='bg-white px-6 py-20 text-[#143d32] md:py-28'>
       <div className='mx-auto max-w-7xl'>
         <AnimateInView className='text-center'>
-          <p className='text-xs font-semibold tracking-[0.16em] text-[#0067d8] uppercase'>
+          <p className='text-xs font-semibold tracking-[0.16em] text-[#1d7658] uppercase'>
             {t('Start in three steps')}
           </p>
           <h2 className='mt-4 text-3xl font-semibold tracking-[-0.03em] md:text-4xl'>
@@ -60,7 +60,7 @@ export function HowItWorks() {
         <div className='relative mt-14'>
           <div
             aria-hidden='true'
-            className='absolute top-7 right-[17%] left-[17%] hidden h-px bg-[#dce7f2] md:block'
+            className='absolute top-7 right-[17%] left-[17%] hidden h-px bg-[#d8e3d8] md:block'
           />
           <ol className='relative grid gap-8 md:grid-cols-3 md:gap-10'>
             {steps.map((step, index) => {
@@ -72,14 +72,14 @@ export function HowItWorks() {
                   as='li'
                   className='relative text-center'
                 >
-                  <div className='relative mx-auto flex size-14 items-center justify-center rounded-2xl border border-[#dce7f2] bg-white text-[#0073ed] shadow-sm'>
+                  <div className='relative mx-auto flex size-14 items-center justify-center rounded-2xl border border-[#d8e3d8] bg-white text-[#1d7658] shadow-sm'>
                     <Icon className='size-5' strokeWidth={1.8} />
-                    <span className='absolute -top-2 -right-2 flex size-6 items-center justify-center rounded-full bg-[#07182e] text-[11px] font-semibold text-white'>
+                    <span className='absolute -top-2 -right-2 flex size-6 items-center justify-center rounded-full bg-[#143d32] text-[11px] font-semibold text-white'>
                       {index + 1}
                     </span>
                   </div>
                   <h3 className='mt-6 text-lg font-semibold'>{step.title}</h3>
-                  <p className='mx-auto mt-3 max-w-xs text-sm leading-7 text-[#526579]'>
+                  <p className='mx-auto mt-3 max-w-xs text-sm leading-7 text-[#526b60]'>
                     {step.description}
                   </p>
                 </AnimateInView>

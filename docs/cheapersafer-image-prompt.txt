@@ -1,0 +1,8 @@
+Brand: cheapersafer.si
+Homepage slogan: 让每一枚 Token，更省，也更安心。
+English supporting line: Cheaper to use. Safer to build.
+Generated with the built-in image_gen tool.
+Final asset: web/public/cheapersafer-hero.png
+
+Final generation prompt:
+Use case: ads-marketing. Asset type: polished 3D homepage hero illustration for cheapersafer.si, an AI API gateway brand whose meaning is cheaper and safer. Primary request: portray efficient AI tokens protected by thoughtful security. Scene/backdrop: a seamless warm ivory studio background #f7f8f2 with soft sage shadows, no text. Subject: one large elegant translucent mint-glass shield with a crisp deep emerald checkmark, encircled by a sculptural emerald infinity loop / smooth efficient routing ribbon; three small rounded ivory and pale mint tokens with abstract circuit engravings float around its base. Style/medium: premium minimalist 3D editorial product rendering, tactile glass and satin ceramic, sophisticated friendly fintech / developer tool identity. Composition/framing: landscape 3:2, subject on the right two thirds with generous clean space on left, shield upright in a slight three-quarter view, fully visible without cropping, balanced and restrained. Lighting/mood: soft natural studio illumination, calm trust, beautiful refractions, subtle shadows. Color palette: warm ivory, deep forest green #143d32, jade #1d7658, pale mint #bbebcc, very small lime accent. Constraints: no people, no characters, no currency symbols, no logos, no letters, no charts, no marketing claims, no watermark, no blue or purple neon, no busy background.

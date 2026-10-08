@@ -17,10 +17,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 import { Link } from '@tanstack/react-router'
-import { ArrowRight, Check } from 'lucide-react'
+import { ArrowRight, Check, ShieldCheck, Wallet } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
-import rsHeroImage from '@/assets/rs/rs-hero.png'
 import { Button } from '@/components/ui/button'
 
 interface HeroProps {
@@ -29,106 +28,114 @@ interface HeroProps {
 }
 
 export function Hero(props: HeroProps) {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const guestDestination =
     props.registerEnabled === false ? '/sign-in' : '/sign-up'
   const primaryDestination = props.isAuthenticated
     ? '/dashboard'
     : guestDestination
-  const headline = t('Make AI integration simpler for businesses and individuals.')
-  const chineseHeadlineParts = i18n.resolvedLanguage?.startsWith('zh')
-    ? headline.match(/^(.*?，)(.*)$/)
-    : null
   const supportingPoints = [
-    t('Self-service signup'),
-    t('Prepaid balance'),
     t('Usage-based billing'),
+    t('Keys and quotas under control'),
+    t('Usage and costs made clear'),
   ]
 
   return (
     <section
-      className='relative flex min-h-[700px] items-center overflow-hidden bg-[#07182e] px-6 pt-24 pb-16 text-white md:min-h-[760px] md:pt-28 md:pb-20'
-      aria-labelledby='rs-hero-title'
+      className='relative overflow-hidden bg-[#f7f8f2] px-6 pt-32 pb-12 text-[#143d32] md:pt-36 md:pb-20'
+      aria-labelledby='cheapersafer-hero-title'
     >
-      <img
-        src={rsHeroImage}
-        alt=''
-        aria-hidden='true'
-        className='absolute right-[-18%] bottom-0 h-auto w-[150%] max-w-none object-contain sm:inset-0 sm:h-full sm:w-full sm:object-cover sm:object-[62%_center] lg:object-center'
-      />
-      <div
-        aria-hidden='true'
-        className='absolute inset-0 bg-[linear-gradient(180deg,rgba(7,24,46,0.99)_0%,rgba(7,24,46,0.96)_58%,rgba(7,24,46,0.38)_100%)] sm:bg-[linear-gradient(90deg,rgba(7,24,46,0.99)_0%,rgba(7,24,46,0.92)_34%,rgba(7,24,46,0.4)_62%,rgba(7,24,46,0.02)_84%)]'
-      />
-      <div
-        aria-hidden='true'
-        className='absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#07182e] to-transparent'
-      />
-
-      <div className='relative mx-auto w-full max-w-7xl'>
-        <div className='max-w-[42rem]'>
-          <p className='landing-animate-fade-up mb-5 text-sm font-semibold tracking-[0.18em] text-[#72b9ff] uppercase opacity-0'>
-            {t('Connect AI capabilities for businesses and individuals')}
+      <div className='relative mx-auto grid w-full max-w-7xl items-center gap-8 lg:min-h-[570px] lg:grid-cols-[1.05fr_1fr] lg:gap-0'>
+        <div className='relative z-10 max-w-[42rem]'>
+          <p className='landing-animate-fade-up mb-7 inline-flex items-center gap-2.5 rounded-full border border-[#d8e3d8] bg-white/70 px-4 py-2 text-xs font-semibold tracking-[0.06em] text-[#236447] opacity-0'>
+            <span
+              aria-hidden='true'
+              className='size-1.5 rounded-full bg-[#1d7658]'
+            />
+            {t('Cheaper to use. Safer to build.')}
           </p>
           <h1
-            id='rs-hero-title'
-            className='landing-animate-fade-up max-w-3xl text-[clamp(2.75rem,6vw,5.4rem)] leading-[1.04] font-semibold tracking-[-0.045em] opacity-0'
+            id='cheapersafer-hero-title'
+            className='landing-animate-fade-up text-[clamp(2.5rem,5.2vw,4.5rem)] leading-[1.2] font-semibold tracking-[-0.045em] opacity-0'
             style={{ animationDelay: '70ms' }}
           >
-            {chineseHeadlineParts ? (
-              <>
-                {chineseHeadlineParts[1]}
-                <span className='whitespace-nowrap'>
-                  {chineseHeadlineParts[2]}
-                </span>
-              </>
-            ) : (
-              headline
-            )}
+            <span className='block'>{t('Make every Token')}</span>
+            <span className='mt-1 block text-[#1d7658]'>
+              {t('cheaper, and safer.')}
+            </span>
           </h1>
           <p
-            className='landing-animate-fade-up mt-7 max-w-[39rem] text-base leading-8 text-blue-50/76 opacity-0 md:text-lg'
+            className='landing-animate-fade-up mt-7 max-w-[33rem] text-base leading-8 text-[#526b60] opacity-0 md:text-lg'
             style={{ animationDelay: '140ms' }}
           >
             {t(
-              'Connect multiple models through one unified API. Businesses and individuals can get started on their own, pay by usage, and keep usage and costs easy to understand.'
+              'One API for multiple AI models. Pay for what you use, manage keys and quotas, and see where every Token goes. Built for businesses and individuals.'
             )}
           </p>
-
           <div
             className='landing-animate-fade-up mt-9 flex flex-col gap-3 opacity-0 sm:flex-row'
             style={{ animationDelay: '210ms' }}
           >
             <Button
-              className='group h-12 rounded-lg bg-[#0073ed] px-6 text-sm font-semibold text-white shadow-[0_12px_30px_rgba(0,115,237,0.28)] hover:bg-[#0067d8]'
+              className='group h-12 rounded-xl bg-[#143d32] px-6 text-sm font-semibold text-white shadow-[0_8px_20px_rgba(20,61,50,0.12)] hover:bg-[#1d7658]'
               render={<Link to={primaryDestination} />}
             >
               {t('Get Started')}
-              <ArrowRight className='ml-1.5 size-4 transition-transform group-hover:translate-x-0.5' />
+              <ArrowRight
+                aria-hidden='true'
+                className='ml-1.5 size-4 transition-transform group-hover:translate-x-0.5'
+              />
             </Button>
             <Button
               variant='outline'
-              className='h-12 rounded-lg border-white/28 bg-white/7 px-6 text-sm font-semibold text-white backdrop-blur-md hover:border-white/45 hover:bg-white/14 hover:text-white'
+              className='h-12 rounded-xl border-[#cbd9cd] bg-transparent px-6 text-sm font-semibold text-[#143d32] hover:border-[#1d7658] hover:bg-[#e8f0e5] hover:text-[#143d32]'
               render={<Link to='/pricing' />}
             >
               {t('View models and pricing')}
             </Button>
           </div>
-
           <ul
-            className='landing-animate-fade-up mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm text-blue-50/74 opacity-0'
+            className='landing-animate-fade-up mt-7 flex flex-wrap gap-x-5 gap-y-3 text-xs text-[#526b60] opacity-0'
             style={{ animationDelay: '280ms' }}
           >
             {supportingPoints.map((point) => (
-              <li key={point} className='flex items-center gap-2'>
-                <span className='flex size-5 items-center justify-center rounded-full border border-[#34cf00]/40 bg-[#34cf00]/12 text-[#61e735]'>
-                  <Check className='size-3' strokeWidth={2.5} />
-                </span>
+              <li key={point} className='flex items-center gap-1.5'>
+                <Check
+                  aria-hidden='true'
+                  className='size-3.5 text-[#1d7658]'
+                  strokeWidth={2.5}
+                />
                 {point}
               </li>
             ))}
           </ul>
         </div>
+        <div className='relative mx-auto w-full max-w-xl lg:max-w-none'>
+          <img
+            src='/cheapersafer-hero.png'
+            alt={t(
+              'A mint glass shield protects AI tokens inside an efficient green routing loop'
+            )}
+            width={1536}
+            height={1024}
+            fetchPriority='high'
+            className='aspect-[1.12] w-full rounded-[2rem] object-cover object-[75%_center] mix-blend-multiply'
+          />
+          <div className='absolute top-[12%] right-0 flex items-center gap-2.5 rounded-2xl border border-white/90 bg-white/90 px-4 py-3 text-sm shadow-[0_12px_32px_rgba(20,61,50,0.08)] backdrop-blur-sm'>
+            <ShieldCheck aria-hidden='true' className='size-5 text-[#1d7658]' />
+            <span>{t('Your keys. Your control.')}</span>
+          </div>
+          <div className='absolute bottom-[6%] left-0 flex items-center gap-2.5 rounded-2xl border border-white/90 bg-white/90 px-4 py-3 text-sm shadow-[0_12px_32px_rgba(20,61,50,0.08)] backdrop-blur-sm'>
+            <Wallet aria-hidden='true' className='size-5 text-[#1d7658]' />
+            <span>{t('Every Token, accounted for.')}</span>
+          </div>
+        </div>
+      </div>
+      <div className='mx-auto mt-10 flex max-w-7xl flex-wrap items-center justify-between gap-3 border-t border-[#d8e3d8] pt-6 text-xs text-[#526b60]'>
+        <span>{t('A simpler way to connect with AI')}</span>
+        <span className='font-mono text-[#236447]'>
+          {t('One API / More possibilities')}
+        </span>
       </div>
     </section>
   )

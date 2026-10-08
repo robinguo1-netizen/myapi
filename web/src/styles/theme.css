@@ -19,9 +19,13 @@ For commercial licensing, please contact support@quantumnous.com
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-sans: 'Inter Variable', 'Inter', -apple-system, 'PingFang SC', 'Noto Sans SC', sans-serif;
-  --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', 'SF Mono', 'Menlo', monospace;
-  --font-jetbrains-mono: 'JetBrains Mono Variable', 'JetBrains Mono', 'SF Mono', 'Menlo', monospace;
+  --font-sans:
+    'Inter Variable', 'Inter', -apple-system, 'PingFang SC', 'Noto Sans SC',
+    sans-serif;
+  --font-mono:
+    'JetBrains Mono Variable', 'JetBrains Mono', 'SF Mono', 'Menlo', monospace;
+  --font-jetbrains-mono:
+    'JetBrains Mono Variable', 'JetBrains Mono', 'SF Mono', 'Menlo', monospace;
   /* Editorial serif token — the body face used by the `serif` font axis
    * and by presets that opt in (currently Anthropic). Lora carries only
    * Latin glyphs, so the stack walks through CJK serifs (Noto / Source Han
@@ -111,7 +115,7 @@ For commercial licensing, please contact support@quantumnous.com
   --card-foreground: oklch(0.2 0.02 260);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.2 0.02 260);
-  --primary: oklch(0.6 0.18 230);
+  --primary: oklch(0.43 0.09 160);
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.97 0.008 260);
   --secondary-foreground: oklch(0.4 0.16 250);
@@ -131,7 +135,7 @@ For commercial licensing, please contact support@quantumnous.com
   --neutral-foreground: oklch(0.2 0.02 260);
   --border: oklch(0.9 0.01 260);
   --input: oklch(0.9 0.01 260);
-  --ring: oklch(0.6 0.18 230);
+  --ring: oklch(0.43 0.09 160);
   --chart-1: oklch(0.6 0.18 230);
   --chart-2: oklch(0.65 0.16 200);
   --chart-3: oklch(0.6 0.15 280);
@@ -142,12 +146,12 @@ For commercial licensing, please contact support@quantumnous.com
   --overview-accent-3: oklch(0.6 0.15 280);
   --sidebar: oklch(0.97 0.008 260);
   --sidebar-foreground: oklch(0.2 0.02 260);
-  --sidebar-primary: oklch(0.6 0.18 230);
+  --sidebar-primary: oklch(0.43 0.09 160);
   --sidebar-primary-foreground: oklch(1 0 0);
   --sidebar-accent: color-mix(in oklch, var(--primary) 12%, var(--background));
   --sidebar-accent-foreground: oklch(0.5 0.18 230);
   --sidebar-border: oklch(0.9 0.01 260);
-  --sidebar-ring: oklch(0.6 0.18 230);
+  --sidebar-ring: oklch(0.43 0.09 160);
   --skeleton-base: oklch(0.95 0.008 260);
   --skeleton-highlight: oklch(0.98 0.005 260);
   --table-row: var(--background);
@@ -181,15 +185,15 @@ For commercial licensing, please contact support@quantumnous.com
 }
 
 .dark {
-  /* Nexus deep-space dark mode with electric blue-cyan accents. */
+  /* Dark surfaces with mint accents for cheapersafer. */
   --background: oklch(0.16 0.02 260);
   --foreground: oklch(0.95 0.01 260);
   --card: oklch(0.21 0.025 260);
   --card-foreground: oklch(0.95 0.01 260);
   --popover: oklch(0.25 0.03 260);
   --popover-foreground: oklch(0.95 0.01 260);
-  --primary: oklch(0.72 0.16 230);
-  --primary-foreground: oklch(1 0 0);
+  --primary: oklch(0.8 0.11 160);
+  --primary-foreground: oklch(0.2 0.03 160);
   --secondary: oklch(0.25 0.03 260);
   --secondary-foreground: oklch(0.85 0.05 250);
   --muted: oklch(0.25 0.03 260);
@@ -208,7 +212,7 @@ For commercial licensing, please contact support@quantumnous.com
   --neutral-foreground: oklch(0.145 0 0);
   --border: oklch(0.35 0.03 260 / 40%);
   --input: oklch(0.35 0.03 260 / 50%);
-  --ring: oklch(0.72 0.16 230);
+  --ring: oklch(0.8 0.11 160);
   --chart-1: oklch(0.72 0.16 230);
   --chart-2: oklch(0.78 0.18 200);
   --chart-3: oklch(0.7 0.15 280);
@@ -216,12 +220,12 @@ For commercial licensing, please contact support@quantumnous.com
   --chart-5: oklch(0.72 0.17 155);
   --sidebar: oklch(0.21 0.025 260);
   --sidebar-foreground: oklch(0.95 0.01 260);
-  --sidebar-primary: oklch(0.72 0.16 230);
-  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-primary: oklch(0.8 0.11 160);
+  --sidebar-primary-foreground: oklch(0.2 0.03 160);
   --sidebar-accent: color-mix(in oklch, var(--primary) 18%, var(--background));
   --sidebar-accent-foreground: oklch(0.78 0.06 230);
   --sidebar-border: oklch(0.35 0.03 260 / 40%);
-  --sidebar-ring: oklch(0.72 0.16 230);
+  --sidebar-ring: oklch(0.8 0.11 160);
   --skeleton-base: oklch(0.25 0.03 260);
   --skeleton-highlight: oklch(0.32 0.03 260);
   --table-row: var(--background);

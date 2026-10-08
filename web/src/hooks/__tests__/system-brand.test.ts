@@ -21,16 +21,27 @@ import { describe, test } from 'node:test'
 
 import { mapStatusDataToConfig } from '../use-system-config'
 
-describe('RS application branding', () => {
-  test('stock upstream status displays RS branding on every shared layout', () => {
+describe('cheapersafer application branding', () => {
+  test('stock upstream status displays cheapersafer branding on every shared layout', () => {
     const config = mapStatusDataToConfig({
       system_name: 'New API',
       logo: '/logo.png',
     })
 
-    assert.equal(config.systemName, 'RS API')
-    assert.equal(config.logo, '/rs-logo.svg')
+    assert.equal(config.systemName, 'cheapersafer.si')
+    assert.equal(config.logo, '/cheapersafer-logo.svg')
   })
+
+  for (const systemName of ['RS API', 'RS', undefined]) {
+    test(`legacy or empty brand ${systemName} resolves to cheapersafer`, () => {
+      const config = mapStatusDataToConfig({
+        system_name: systemName,
+        logo: '/rs-logo.svg',
+      })
+      assert.equal(config.systemName, 'cheapersafer.si')
+      assert.equal(config.logo, '/cheapersafer-logo.svg')
+    })
+  }
 
   test('an explicitly configured system name and logo are preserved', () => {
     const config = mapStatusDataToConfig({

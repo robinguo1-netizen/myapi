@@ -2046,7 +2046,7 @@
     "footer.columns.related.links.oneApi": "One API",
     "footer.columns.related.title": "相關項目",
     "footer.defaultCopyright": "版權所有。",
-    "footer.new\u0061pi.projectAttributionSuffix": "版權所有，由項目貢獻者設計與開發。",
+    "footer.newapi.projectAttributionSuffix": "版權所有，由項目貢獻者設計與開發。",
     "For channels added after May 10, 2025, no need to remove \".\" from model names during deployment": "對於 2025 年 5 月 10 日之後新增的渠道，在部署時無需從模型名稱中移除 \".\"",
     "For private deployments, format: https://fastgpt.run/api/openapi": "對於私有部署，格式為：https://fastgpt.run/api/openapi",
     "For security, existing access tokens cannot be displayed. Regenerate only when you need a new token.": "基於安全考量，現有存取令牌無法再次顯示。僅在需要新令牌時重新生成。",
@@ -5294,6 +5294,17 @@
     "Use the unified endpoint to send your first model request.": "透過統一介面發起首次模型請求。",
     "View models and pricing": "查看模型與價格",
     "Workspace": "工作台",
-    "Send from your client, then inspect the request log": "從客戶端發起請求，然後查看請求日誌"
+    "Send from your client, then inspect the request log": "從客戶端發起請求，然後查看請求日誌",
+    "Cheaper to use. Safer to build.": "用得更省，做得更安心。",
+    "Make every Token": "讓每一枚 Token，",
+    "cheaper, and safer.": "更省，也更安心。",
+    "One API for multiple AI models. Pay for what you use, manage keys and quotas, and see where every Token goes. Built for businesses and individuals.": "一個 API，連接多種 AI 模型。按量付費，自主管理金鑰與額度，讓每一枚 Token 的消耗清晰可見。面向企業，也面向每一個你。",
+    "Your keys. Your control.": "金鑰權限，自主掌控",
+    "Every Token, accounted for.": "每一枚 Token，都有跡可循",
+    "A simpler way to connect with AI": "用更簡單的方式，連接 AI",
+    "Spend wisely. Build confidently.": "花得明白，用得安心",
+    "More value from every Token.": "讓每一枚 Token，都更值得。",
+    "A mint glass shield protects AI tokens inside an efficient green routing loop": "薄荷色玻璃盾牌與綠色環帶守護 AI Token",
+    "One API / More possibilities": "一個 API / 更多可能"
   }
 }

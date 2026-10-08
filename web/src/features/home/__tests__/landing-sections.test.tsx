@@ -34,7 +34,7 @@ async function renderLandingSection(section: React.ReactNode) {
   )
 }
 
-describe('RS landing page sections', () => {
+describe('cheapersafer landing page sections', () => {
   test('presents exactly the three approved business value propositions', async () => {
     const markup = await renderLandingSection(<Features />)
 

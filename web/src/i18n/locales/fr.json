@@ -2046,7 +2046,7 @@
     "footer.columns.related.links.oneApi": "One API",
     "footer.columns.related.title": "Projets liés",
     "footer.defaultCopyright": "Tous droits réservés.",
-    "footer.new\u0061pi.projectAttributionSuffix": "Tous droits réservés. Conçu et développé par les contributeurs du projet.",
+    "footer.newapi.projectAttributionSuffix": "Tous droits réservés. Conçu et développé par les contributeurs du projet.",
     "For channels added after May 10, 2025, no need to remove \".\" from model names during deployment": "Pour les canaux ajoutés après le 10 mai 2025, pas besoin de supprimer \".\" des noms de modèles lors du déploiement",
     "For private deployments, format: https://fastgpt.run/api/openapi": "Pour les déploiements privés, format : https://fastgpt.run/api/openapi",
     "For security, existing access tokens cannot be displayed. Regenerate only when you need a new token.": "Pour des raisons de sécurité, les jetons d'accès existants ne peuvent pas être réaffichés. Ne les régénérez que si vous en avez besoin d'un nouveau.",
@@ -5294,6 +5294,17 @@
     "Use the unified endpoint to send your first model request.": "Utilisez le point d’accès unifié pour envoyer votre première requête.",
     "View models and pricing": "Voir les modèles et les tarifs",
     "Workspace": "Espace de travail",
-    "Send from your client, then inspect the request log": "Envoyez la requête depuis votre client, puis consultez le journal"
+    "Send from your client, then inspect the request log": "Envoyez la requête depuis votre client, puis consultez le journal",
+    "Cheaper to use. Safer to build.": "Moins cher à utiliser. Plus sûr à construire.",
+    "Make every Token": "Chaque Token,",
+    "cheaper, and safer.": "plus économique, plus sûr.",
+    "One API for multiple AI models. Pay for what you use, manage keys and quotas, and see where every Token goes. Built for businesses and individuals.": "Une API pour plusieurs modèles IA. Payez à l’usage, gérez clés et quotas et suivez chaque Token. Pour les entreprises et les particuliers.",
+    "Your keys. Your control.": "Vos clés, votre contrôle.",
+    "Every Token, accounted for.": "Chaque Token est suivi.",
+    "A simpler way to connect with AI": "Connectez-vous à l’IA simplement",
+    "Spend wisely. Build confidently.": "Dépensez mieux. Créez en confiance.",
+    "More value from every Token.": "Plus de valeur pour chaque Token.",
+    "A mint glass shield protects AI tokens inside an efficient green routing loop": "Un bouclier de verre menthe protège des tokens IA dans une boucle verte",
+    "One API / More possibilities": "Une API / Plus de possibilités"
   }
 }

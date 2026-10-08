@@ -20,6 +20,7 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 import { DEFAULT_SYSTEM_NAME, DEFAULT_LOGO } from '@/lib/constants'
+import { normalizeSystemBrand } from '@/lib/system-brand'
 
 export type CurrencyDisplayType = 'USD' | 'CNY' | 'TOKENS' | 'CUSTOM'
 
@@ -95,6 +96,20 @@ export const useSystemConfigStore = create<SystemConfigState>()(
     }),
     {
       name: 'system-config-storage',
+      merge: (persistedState, currentState) => {
+        const persisted = persistedState as
+          | Partial<SystemConfigState>
+          | undefined
+        const config = { ...currentState.config, ...persisted?.config }
+        const brand = normalizeSystemBrand(config.systemName, config.logo)
+        return {
+          ...currentState,
+          config: { ...config, ...brand },
+          loadedLogoUrl: persisted?.loadedLogoUrl
+            ? normalizeSystemBrand(undefined, persisted.loadedLogoUrl).logo
+            : currentState.loadedLogoUrl,
+        }
+      },
       partialize: (state) => ({
         config: state.config,
         loadedLogoUrl: state.loadedLogoUrl,

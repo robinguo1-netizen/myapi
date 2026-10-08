@@ -2046,7 +2046,7 @@
     "footer.columns.related.links.oneApi": "One API",
     "footer.columns.related.title": "Các Dự Án Liên Quan",
     "footer.defaultCopyright": "Bản quyền được bảo lưu.",
-    "footer.new\u0061pi.projectAttributionSuffix": "Bản quyền được bảo lưu. Được thiết kế và phát triển bởi các cộng tác viên dự án.",
+    "footer.newapi.projectAttributionSuffix": "Bản quyền được bảo lưu. Được thiết kế và phát triển bởi các cộng tác viên dự án.",
     "For channels added after May 10, 2025, no need to remove \".\" from model names during deployment": "Đối với các kênh được thêm sau ngày 10 tháng 5 năm 2025, không cần loại bỏ \".\" khỏi tên mô hình trong quá trình triển khai",
     "For private deployments, format: https://fastgpt.run/api/openapi": "Đối với các triển khai riêng tư, định dạng: https://fastgpt.run/api/openapi",
     "For security, existing access tokens cannot be displayed. Regenerate only when you need a new token.": "Vì lý do bảo mật, không thể hiển thị lại token truy cập hiện có. Chỉ tạo lại khi bạn cần token mới.",
@@ -5294,6 +5294,17 @@
     "Use the unified endpoint to send your first model request.": "Dùng điểm cuối thống nhất để gửi yêu cầu mô hình đầu tiên.",
     "View models and pricing": "Xem mô hình và giá",
     "Workspace": "Không gian làm việc",
-    "Send from your client, then inspect the request log": "Gửi từ ứng dụng khách, sau đó kiểm tra nhật ký yêu cầu"
+    "Send from your client, then inspect the request log": "Gửi từ ứng dụng khách, sau đó kiểm tra nhật ký yêu cầu",
+    "Cheaper to use. Safer to build.": "Dùng tiết kiệm hơn. Xây dựng an tâm hơn.",
+    "Make every Token": "Để mỗi Token",
+    "cheaper, and safer.": "tiết kiệm hơn, an tâm hơn.",
+    "One API for multiple AI models. Pay for what you use, manage keys and quotas, and see where every Token goes. Built for businesses and individuals.": "Một API cho nhiều mô hình AI. Trả theo mức dùng, quản lý khóa và hạn mức, theo dõi từng Token. Dành cho doanh nghiệp và cá nhân.",
+    "Your keys. Your control.": "Khóa của bạn. Bạn kiểm soát.",
+    "Every Token, accounted for.": "Theo dõi từng Token.",
+    "A simpler way to connect with AI": "Kết nối AI theo cách đơn giản hơn",
+    "Spend wisely. Build confidently.": "Chi tiêu hợp lý. Xây dựng tự tin.",
+    "More value from every Token.": "Mỗi Token mang lại nhiều giá trị hơn.",
+    "A mint glass shield protects AI tokens inside an efficient green routing loop": "Lá chắn kính xanh bạc hà bảo vệ Token AI trong vòng định tuyến xanh",
+    "One API / More possibilities": "Một API / Nhiều khả năng hơn"
   }
 }

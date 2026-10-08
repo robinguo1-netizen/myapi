@@ -25,6 +25,9 @@ const domWindow = new Window({ url: 'http://localhost/' })
 domWindow.document.write('<!doctype html><html><body></body></html>')
 const domGlobals = [
   'window',
+  'self',
+  'location',
+  'history',
   'document',
   'navigator',
   'HTMLElement',
@@ -75,6 +78,8 @@ const { QueryClient, QueryClientProvider } =
   await import('@tanstack/react-query')
 const { api } = await import('@/lib/api')
 const { useAuthStore } = await import('@/stores/auth-store')
+const { default: en } = await import('@/i18n/locales/en.json')
+const { default: zh } = await import('@/i18n/locales/zh.json')
 const { useSystemConfigStore } = await import('@/stores/system-config-store')
 const reactTestGlobals = globalThis as typeof globalThis & {
   IS_REACT_ACT_ENVIRONMENT?: boolean
@@ -115,7 +120,11 @@ describe('Landing page entry navigation', () => {
   ] as const) {
     test(scenario.name, async () => {
       const i18n = createInstance()
-      await i18n.init({ lng: 'en', resources: {}, initAsync: false })
+      await i18n.init({
+        lng: 'en',
+        resources: { en, zhCN: zh },
+        initAsync: false,
+      })
       const rootRoute = createRootRoute()
       const homeRoute = createRoute({
         getParentRoute: () => rootRoute,
@@ -158,6 +167,8 @@ describe('Landing page entry navigation', () => {
               button: 0,
             })
           )
+        })
+        await act(async () => {
           await router.load()
         })
         assert.equal(router.state.location.pathname, scenario.destination)
@@ -194,9 +205,36 @@ describe('Landing page entry navigation', () => {
         }
       }
       useAuthStore.getState().auth.reset()
+      localStorage.setItem(
+        'system-config-storage',
+        JSON.stringify({
+          state: {
+            config: {
+              ...originalSystemConfig.config,
+              systemName: 'RS API',
+              logo: '/rs-logo.svg',
+            },
+            loadedLogoUrl: '/rs-logo.svg',
+          },
+          version: 0,
+        })
+      )
+      await useSystemConfigStore.persist.rehydrate()
+      assert.equal(
+        useSystemConfigStore.getState().config.systemName,
+        'cheapersafer.si'
+      )
+      assert.equal(
+        useSystemConfigStore.getState().config.logo,
+        '/cheapersafer-logo.svg'
+      )
       useSystemConfigStore.getState().setLoading(false)
       const i18n = createInstance()
-      await i18n.init({ lng: 'en', resources: {}, initAsync: false })
+      await i18n.init({
+        lng: 'en',
+        resources: { en, zhCN: zh },
+        initAsync: false,
+      })
       const rootRoute = createRootRoute()
       const homeRoute = createRoute({
         getParentRoute: () => rootRoute,
@@ -227,6 +265,29 @@ describe('Landing page entry navigation', () => {
             </QueryClientProvider>
           )
         })
+        assert.equal(
+          container.querySelector('h1')?.textContent,
+          'Make every Tokencheaper, and safer.'
+        )
+        await act(async () => {
+          await i18n.changeLanguage('zhCN')
+        })
+        assert.equal(
+          container.querySelector('h1')?.textContent,
+          '让每一枚 Token，更省，也更安心。'
+        )
+        assert.ok(
+          container.querySelector(
+            'img[alt="薄荷色玻璃盾牌与绿色环带守护 AI Token"]'
+          )
+        )
+        await act(async () => {
+          await i18n.changeLanguage('en')
+        })
+        const pricingLink = [...container.querySelectorAll('a')].find((link) =>
+          link.textContent?.includes('View models and pricing')
+        )
+        assert.equal(pricingLink?.getAttribute('href'), '/pricing')
         const header = container.querySelector('header')
         assert.ok(header, 'the public header is visible')
         assert.equal(
@@ -238,11 +299,11 @@ describe('Landing page entry navigation', () => {
         )
         assert.equal(
           header.querySelector('img')?.getAttribute('src'),
-          '/rs-logo.svg'
+          '/cheapersafer-logo.svg'
         )
         assert.equal(
           container.querySelector('footer img')?.getAttribute('src'),
-          '/rs-logo.svg'
+          '/cheapersafer-logo.svg'
         )
         const startLinks = [...container.querySelectorAll('a')].filter((link) =>
           link.textContent?.includes('Get Started')
@@ -263,6 +324,8 @@ describe('Landing page entry navigation', () => {
               button: 0,
             })
           )
+        })
+        await act(async () => {
           await router.load()
         })
         assert.equal(router.state.location.pathname, destination)

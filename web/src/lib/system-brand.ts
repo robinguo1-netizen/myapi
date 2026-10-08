@@ -16,17 +16,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
-/**
- * Application-wide constants
- */
+import { DEFAULT_LOGO, DEFAULT_SYSTEM_NAME } from './constants'
 
-// System Configuration Defaults
-export const DEFAULT_SYSTEM_NAME = 'cheapersafer.si'
-export const DEFAULT_LOGO = '/cheapersafer-logo.svg'
-
-// LocalStorage Keys
-export const STORAGE_KEYS = {
-  SYSTEM_NAME: 'system_name',
-  LOGO: 'logo',
-  FOOTER_HTML: 'footer_html',
-} as const
+export function normalizeSystemBrand(systemName?: string, logo?: string) {
+  return {
+    systemName:
+      !systemName || ['New API', 'RS API', 'RS'].includes(systemName)
+        ? DEFAULT_SYSTEM_NAME
+        : systemName,
+    logo:
+      !logo || ['/logo.png', '/rs-logo.svg'].includes(logo)
+        ? DEFAULT_LOGO
+        : logo,
+  }
+}

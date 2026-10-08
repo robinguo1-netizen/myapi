@@ -2046,7 +2046,7 @@
     "footer.columns.related.links.oneApi": "One API",
     "footer.columns.related.title": "Related Projects",
     "footer.defaultCopyright": "All rights reserved.",
-    "footer.new\u0061pi.projectAttributionSuffix": "All rights reserved. Designed and developed by the project contributors.",
+    "footer.newapi.projectAttributionSuffix": "All rights reserved. Designed and developed by the project contributors.",
     "For channels added after May 10, 2025, no need to remove \".\" from model names during deployment": "For channels added after May 10, 2025, no need to remove \".\" from model names during deployment",
     "For private deployments, format: https://fastgpt.run/api/openapi": "For private deployments, format: https://fastgpt.run/api/openapi",
     "For security, existing access tokens cannot be displayed. Regenerate only when you need a new token.": "For security, existing access tokens cannot be displayed. Regenerate only when you need a new token.",
@@ -5294,6 +5294,17 @@
     "Use the unified endpoint to send your first model request.": "Use the unified endpoint to send your first model request.",
     "View models and pricing": "View models and pricing",
     "Workspace": "Workspace",
-    "Send from your client, then inspect the request log": "Send from your client, then inspect the request log"
+    "Send from your client, then inspect the request log": "Send from your client, then inspect the request log",
+    "Cheaper to use. Safer to build.": "Cheaper to use. Safer to build.",
+    "Make every Token": "Make every Token",
+    "cheaper, and safer.": "cheaper, and safer.",
+    "One API for multiple AI models. Pay for what you use, manage keys and quotas, and see where every Token goes. Built for businesses and individuals.": "One API for multiple AI models. Pay for what you use, manage keys and quotas, and see where every Token goes. Built for businesses and individuals.",
+    "Your keys. Your control.": "Your keys. Your control.",
+    "Every Token, accounted for.": "Every Token, accounted for.",
+    "A simpler way to connect with AI": "A simpler way to connect with AI",
+    "Spend wisely. Build confidently.": "Spend wisely. Build confidently.",
+    "More value from every Token.": "More value from every Token.",
+    "A mint glass shield protects AI tokens inside an efficient green routing loop": "A mint glass shield protects AI tokens inside an efficient green routing loop",
+    "One API / More possibilities": "One API / More possibilities"
   }
 }

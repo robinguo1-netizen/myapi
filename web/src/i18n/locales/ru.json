@@ -2046,7 +2046,7 @@
     "footer.columns.related.links.oneApi": "Один API",
     "footer.columns.related.title": "Связанные проекты",
     "footer.defaultCopyright": "Все права защищены.",
-    "footer.new\u0061pi.projectAttributionSuffix": "Все права защищены. Разработано участниками проекта.",
+    "footer.newapi.projectAttributionSuffix": "Все права защищены. Разработано участниками проекта.",
     "For channels added after May 10, 2025, no need to remove \".\" from model names during deployment": "Для каналов, добавленных после 10 мая 2025 г., не нужно удалять \".\" из имён моделей при развёртывании",
     "For private deployments, format: https://fastgpt.run/api/openapi": "Для частных развертываний, формат: https://fastgpt.run/api/openapi",
     "For security, existing access tokens cannot be displayed. Regenerate only when you need a new token.": "В целях безопасности существующие токены доступа нельзя просмотреть повторно. Создавайте новый токен только при необходимости.",
@@ -5294,6 +5294,17 @@
     "Use the unified endpoint to send your first model request.": "Отправьте первый запрос к модели через единый адрес.",
     "View models and pricing": "Смотреть модели и цены",
     "Workspace": "Рабочая область",
-    "Send from your client, then inspect the request log": "Отправьте запрос из клиента, затем проверьте журнал запросов"
+    "Send from your client, then inspect the request log": "Отправьте запрос из клиента, затем проверьте журнал запросов",
+    "Cheaper to use. Safer to build.": "Дешевле пользоваться. Надёжнее создавать.",
+    "Make every Token": "Каждый Token —",
+    "cheaper, and safer.": "дешевле и безопаснее.",
+    "One API for multiple AI models. Pay for what you use, manage keys and quotas, and see where every Token goes. Built for businesses and individuals.": "Один API для разных моделей ИИ. Оплата по использованию, управление ключами и квотами, прозрачный расход Token. Для компаний и частных пользователей.",
+    "Your keys. Your control.": "Ваши ключи. Ваш контроль.",
+    "Every Token, accounted for.": "Каждый Token учтён.",
+    "A simpler way to connect with AI": "Простой доступ к ИИ",
+    "Spend wisely. Build confidently.": "Разумные расходы. Уверенная разработка.",
+    "More value from every Token.": "Больше пользы от каждого Token.",
+    "A mint glass shield protects AI tokens inside an efficient green routing loop": "Мятный стеклянный щит защищает токены ИИ в зелёном контуре",
+    "One API / More possibilities": "Один API / Больше возможностей"
   }
 }

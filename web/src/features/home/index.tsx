@@ -25,6 +25,7 @@ import type { TopNavLink } from '@/components/layout/types'
 import { RichContent } from '@/components/rich-content'
 import { useTheme } from '@/context/theme-provider'
 import { useStatus } from '@/hooks/use-status'
+import { DEFAULT_LOGO, DEFAULT_SYSTEM_NAME } from '@/lib/constants'
 import { isLikelyHtml } from '@/lib/content-format'
 import { useAuthStore } from '@/stores/auth-store'
 
@@ -131,21 +132,29 @@ export function Home() {
     <PublicLayout
       showMainContainer={false}
       navLinks={homeNavLinks}
-      siteName='RS API'
-      logo={<img src='/rs-logo.svg' alt='RS API' className='size-7' />}
+      siteName={DEFAULT_SYSTEM_NAME}
+      logo={
+        <img src={DEFAULT_LOGO} alt={DEFAULT_SYSTEM_NAME} className='size-7' />
+      }
       showNotifications={false}
       headerProps={{
-        className: 'text-white [&_a]:!text-white [&_button]:!text-white',
+        className:
+          'text-[#143d32] [&_a]:!text-[#143d32] [&_button]:!text-[#143d32] [&_a[data-slot=button]]:!bg-[#143d32] [&_a[data-slot=button]]:!text-white',
         unauthenticatedLabel: 'Get Started',
       }}
     >
-      <Hero
-        isAuthenticated={isAuthenticated}
-        registerEnabled={status?.register_enabled}
+      <main>
+        <Hero
+          isAuthenticated={isAuthenticated}
+          registerEnabled={status?.register_enabled}
+        />
+        <Features />
+        <HowItWorks />
+      </main>
+      <Footer
+        name={DEFAULT_SYSTEM_NAME}
+        className='bg-[#f7f8f2] text-[#143d32] [--border:#d8e3d8] [--foreground:#143d32] [--muted-foreground:#526b60]'
       />
-      <Features />
-      <HowItWorks />
-      <Footer name='RS API' />
     </PublicLayout>
   )
 }
