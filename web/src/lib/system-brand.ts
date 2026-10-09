@@ -25,7 +25,8 @@ export function normalizeSystemBrand(systemName?: string, logo?: string) {
         ? DEFAULT_SYSTEM_NAME
         : systemName,
     logo:
-      !logo || ['/logo.png', '/rs-logo.svg'].includes(logo)
+      !logo ||
+      ['/logo.png', '/rs-logo.svg', '/cheapersafer-logo.svg'].includes(logo)
         ? DEFAULT_LOGO
         : logo,
   }

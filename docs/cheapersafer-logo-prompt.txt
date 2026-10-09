@@ -1,0 +1,20 @@
+Mode: built-in image_gen. Generated 2026-10-09 (Asia/Shanghai).
+Asset: approved cheapersafer.si logo. The wordmark SVG embeds the exact transparent PNG with a tight viewBox; the small CS SVG reproduces its geometry for favicon and console use.
+
+GENERATION PROMPT
+Use case: logo-brand.
+Asset type: one polished original logo concept for the existing AI API brand cheapersafer.si, as a clean high-resolution horizontal logo on a genuinely transparent background.
+Primary request: strong technology and power. Design a memorable compact geometric CS monogram to the left, with the exact lowercase wordmark "cheapersafer.si" to the right.
+Brand meaning and existing visual context: cheaper AI token usage, transparent and trustworthy billing; established website colors are very dark forest green, jade green and pale mint. Cheaper is the leading message, safer comes from costs being clear.
+Symbol design: a powerful broad geometric C-shaped open frame combined with an angular S-shaped continuous inner flow. Bold solid masses, precision-cut 45-degree corners, disciplined negative space, balanced silhouette. Integrate one subtle diagonal southeast/down-right cut or terminal hinting at lower costs; a short clean confirming stroke may be implicit in the geometry, but the whole mark must remain one cohesive monogram and easily legible at small size. Keep enough openness for C and S to read, avoid dense overlapping strokes.
+Wordmark: exactly "cheapersafer.si", spelled c h e a p e r s a f e r . s i, no spaces. Heavy contemporary geometric sans serif, moderately wide proportions, precise kerning, flat baseline; subtle technical squared detailing, highly readable. Entire wordmark in very dark forest green. .si slightly lighter jade is acceptable but should remain on the same baseline and readable.
+Palette: very dark forest green #123F32 for the strongest structure and type, jade #187858 with a small mint #86DAB5 accent in the icon. Flat solid colors, clean crisp vector-like edges, no gradients.
+Composition: one centered horizontal lockup, icon approximately the height of the wordmark or a little taller, generous breathing room, useful transparent padding. This is a real logo artwork, not a scene, not a mockup, not a presentation board. No alternate variants or duplicated marks.
+Avoid: shields, padlocks, currency symbols, literal paper bills, coins, circuits with tiny nodes, generic swoosh, stock AI brain, excessive arrows, holograms, 3D rendering, bevels, gloss, metallic surfaces, glow, shadows, background cards, taglines, extra typography, watermarks. Make the distinctive silhouette and structural typography carry the technology and power.
+
+LIGHT PRESENTATION EDIT PROMPT
+Use case: precise-object-edit.
+Input image 1 is the edit target: a finished horizontal cheapersafer.si logo with a CS monogram.
+Create a clean light-background presentation of this exact logo.
+Change ONLY the transparent background to an even pale warm off-white #F7F9F3 matching its green website. Preserve the exact logo silhouette, all C and S geometry, mint diagonal detail, dark green and jade color relationships, exact typography, spacing, and exact text "cheapersafer.si" with all letters unchanged.
+Keep a comfortable generous border all around; horizontally centered logo at approximately 82% canvas width. Landscape aspect ratio around 3:1. No new symbols, no alternate designs, no labels, no slogans, no cards, no textures, no shadows or decorative background. The only purpose is clearly seeing the finished logo on its natural light website background.

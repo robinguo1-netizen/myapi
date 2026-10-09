@@ -31,11 +31,13 @@ import { useNotifications } from '@/hooks/use-notifications'
 import { useStatus } from '@/hooks/use-status'
 import { useSystemConfig } from '@/hooks/use-system-config'
 import { useTopNavLinks } from '@/hooks/use-top-nav-links'
+import { DEFAULT_LOGO, DEFAULT_SYSTEM_NAME } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { useAuthStore } from '@/stores/auth-store'
 
 import { defaultTopNavLinks } from '../config/top-nav.config'
 import type { TopNavLink } from '../types'
+import { BrandWordmark } from './brand-wordmark'
 import { HeaderLogo } from './header-logo'
 
 const AUTH_PROMPT_SECONDS = 5
@@ -105,6 +107,10 @@ export function PublicHeader(props: PublicHeaderProps) {
   const user = auth.user
   const isAuthenticated = !!user
   const displaySiteName = customSiteName || systemName
+  const showBrandWordmark =
+    !customLogo &&
+    displaySiteName === DEFAULT_SYSTEM_NAME &&
+    systemLogo === DEFAULT_LOGO
   const links =
     navLinks ?? (dynamicLinks.length > 0 ? dynamicLinks : defaultTopNavLinks)
 
@@ -238,12 +244,24 @@ export function PublicHeader(props: PublicHeaderProps) {
               to={homeUrl}
               className='group flex shrink-0 items-center gap-2.5'
             >
-              <div className='flex size-7 shrink-0 items-center justify-center transition-all duration-300 group-hover:scale-105'>
-                {logoContent}
-              </div>
-              <span className='text-sm font-semibold tracking-tight'>
-                {loading ? <Skeleton className='h-4 w-16' /> : displaySiteName}
-              </span>
+              {showBrandWordmark ? (
+                <BrandWordmark
+                  fixedLight={!!customSiteName && !mobileOpen && !scrolled}
+                />
+              ) : (
+                <>
+                  <div className='flex size-7 shrink-0 items-center justify-center transition-all duration-300 group-hover:scale-105'>
+                    {logoContent}
+                  </div>
+                  <span className='text-sm font-semibold tracking-tight'>
+                    {loading ? (
+                      <Skeleton className='h-4 w-16' />
+                    ) : (
+                      displaySiteName
+                    )}
+                  </span>
+                </>
+              )}
             </Link>
 
             {/* Desktop nav */}

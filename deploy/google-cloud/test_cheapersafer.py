@@ -45,7 +45,7 @@ class CheapersaferDeploymentTests(unittest.TestCase):
             {"key": "RegisterEnabled", "value": "false"},
             {"key": "PasswordRegisterEnabled", "value": "false"},
             {"key": "SystemName", "value": "cheapersafer.si"},
-            {"key": "Logo", "value": "/cheapersafer-logo.svg"},
+            {"key": "Logo", "value": "/cheapersafer-cs.svg"},
             {"key": "ServerAddress", "value": url},
         ])
         self.assertTrue(all(call.kwargs.get("admin_token") == "test-token" for call in deployment.app_success.call_args_list if call.args[1] == "/api/option/"))

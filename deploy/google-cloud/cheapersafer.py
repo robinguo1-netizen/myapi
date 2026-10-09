@@ -23,7 +23,7 @@ def deployment_args():
         database="cheapersafer_api", database_user="cheapersafer_app",
         admin_username="csadmin", managed_by="cheapersafer-deploy",
         source_bucket=f"{PROJECT}-build-source", brand_name="cheapersafer.si",
-        brand_logo="/cheapersafer-logo.svg", image=None,
+        brand_logo="/cheapersafer-cs.svg", image=None,
         gcloud=os.environ.get("CS_GCLOUD", "gcloud"),
     )
 

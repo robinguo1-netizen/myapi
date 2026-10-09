@@ -25,7 +25,7 @@ import type { TopNavLink } from '@/components/layout/types'
 import { RichContent } from '@/components/rich-content'
 import { useTheme } from '@/context/theme-provider'
 import { useStatus } from '@/hooks/use-status'
-import { DEFAULT_LOGO, DEFAULT_SYSTEM_NAME } from '@/lib/constants'
+import { DEFAULT_SYSTEM_NAME } from '@/lib/constants'
 import { isLikelyHtml } from '@/lib/content-format'
 import { useAuthStore } from '@/stores/auth-store'
 
@@ -133,9 +133,6 @@ export function Home() {
       showMainContainer={false}
       navLinks={homeNavLinks}
       siteName={DEFAULT_SYSTEM_NAME}
-      logo={
-        <img src={DEFAULT_LOGO} alt={DEFAULT_SYSTEM_NAME} className='size-7' />
-      }
       showNotifications={false}
       headerProps={{
         className:

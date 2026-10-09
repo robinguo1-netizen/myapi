@@ -64,7 +64,7 @@ export default defineConfig(({ envMode }) => {
     },
     html: {
       template: './index.html',
-      favicon: './public/cheapersafer-logo.svg',
+      favicon: './public/cheapersafer-cs.svg',
     },
     server: {
       host: '0.0.0.0',

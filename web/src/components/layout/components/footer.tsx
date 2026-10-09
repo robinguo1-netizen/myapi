@@ -25,6 +25,8 @@ import { useSystemConfig } from '@/hooks/use-system-config'
 import { DEFAULT_LOGO, DEFAULT_SYSTEM_NAME } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
+import { BrandWordmark } from './brand-wordmark'
+
 interface FooterLink {
   text: string
   href: string
@@ -256,14 +258,24 @@ export function Footer(props: FooterProps) {
           {/* Brand column */}
           <div className='shrink-0'>
             <Link to='/' className='group flex items-center gap-2.5'>
-              <img
-                src={displayLogo}
-                alt={displayName}
-                className='size-7 rounded-lg object-contain'
-              />
-              <span className='text-sm font-semibold tracking-tight'>
-                {displayName}
-              </span>
+              {displayName === DEFAULT_SYSTEM_NAME &&
+              displayLogo === DEFAULT_LOGO ? (
+                <BrandWordmark
+                  fixedLight={props.name === DEFAULT_SYSTEM_NAME}
+                  className='h-8'
+                />
+              ) : (
+                <>
+                  <img
+                    src={displayLogo}
+                    alt={displayName}
+                    className='size-7 rounded-lg object-contain'
+                  />
+                  <span className='text-sm font-semibold tracking-tight'>
+                    {displayName}
+                  </span>
+                </>
+              )}
             </Link>
             <p className='text-muted-foreground/60 mt-3 max-w-[200px] text-xs leading-relaxed'>
               {t('Powerful API Management Platform')}

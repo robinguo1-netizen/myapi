@@ -16,17 +16,26 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
-/**
- * Application-wide constants
- */
+import { DEFAULT_SYSTEM_NAME } from '@/lib/constants'
+import { cn } from '@/lib/utils'
 
-// System Configuration Defaults
-export const DEFAULT_SYSTEM_NAME = 'cheapersafer.si'
-export const DEFAULT_LOGO = '/cheapersafer-cs.svg'
+type BrandWordmarkProps = {
+  className?: string
+  fixedLight?: boolean
+}
 
-// LocalStorage Keys
-export const STORAGE_KEYS = {
-  SYSTEM_NAME: 'system_name',
-  LOGO: 'logo',
-  FOOTER_HTML: 'footer_html',
-} as const
+export function BrandWordmark(props: BrandWordmarkProps) {
+  return (
+    <img
+      src='/cheapersafer-wordmark.svg'
+      alt={DEFAULT_SYSTEM_NAME}
+      width={1982}
+      height={352}
+      className={cn(
+        'h-7 w-auto shrink-0 object-contain',
+        !props.fixedLight && 'dark:brightness-0 dark:invert',
+        props.className
+      )}
+    />
+  )
+}

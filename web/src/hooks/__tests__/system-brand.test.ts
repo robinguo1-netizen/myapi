@@ -29,17 +29,20 @@ describe('cheapersafer application branding', () => {
     })
 
     assert.equal(config.systemName, 'cheapersafer.si')
-    assert.equal(config.logo, '/cheapersafer-logo.svg')
+    assert.equal(config.logo, '/cheapersafer-cs.svg')
   })
 
-  for (const systemName of ['RS API', 'RS', undefined]) {
+  for (const systemName of ['RS API', 'RS', 'cheapersafer.si', undefined]) {
     test(`legacy or empty brand ${systemName} resolves to cheapersafer`, () => {
       const config = mapStatusDataToConfig({
         system_name: systemName,
-        logo: '/rs-logo.svg',
+        logo:
+          systemName === 'cheapersafer.si'
+            ? '/cheapersafer-logo.svg'
+            : '/rs-logo.svg',
       })
       assert.equal(config.systemName, 'cheapersafer.si')
-      assert.equal(config.logo, '/cheapersafer-logo.svg')
+      assert.equal(config.logo, '/cheapersafer-cs.svg')
     })
   }
 

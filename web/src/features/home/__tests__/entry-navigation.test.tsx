@@ -226,7 +226,7 @@ describe('Landing page entry navigation', () => {
       )
       assert.equal(
         useSystemConfigStore.getState().config.logo,
-        '/cheapersafer-logo.svg'
+        '/cheapersafer-cs.svg'
       )
       useSystemConfigStore.getState().setLoading(false)
       const i18n = createInstance()
@@ -299,11 +299,11 @@ describe('Landing page entry navigation', () => {
         )
         assert.equal(
           header.querySelector('img')?.getAttribute('src'),
-          '/cheapersafer-logo.svg'
+          '/cheapersafer-wordmark.svg'
         )
         assert.equal(
           container.querySelector('footer img')?.getAttribute('src'),
-          '/cheapersafer-logo.svg'
+          '/cheapersafer-wordmark.svg'
         )
         const startLinks = [...container.querySelectorAll('a')].filter((link) =>
           link.textContent?.includes('Get Started')
